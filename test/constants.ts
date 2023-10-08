@@ -2,9 +2,9 @@ import { ethers } from "ethers";
 
 export const roles = {
     admin: "0x0000000000000000000000000000000000000000000000000000000000000000",
-    upgrader: ethers.keccak256(ethers.toUtf8Bytes("UPGRADER_ROLE")),
+    upgrader: ethers.keccak256(ethers.toUtf8Bytes("UPGRADER_ROLE")), 
     whitelistManager: ethers.keccak256(ethers.toUtf8Bytes("WHITELIST_MANAGER_ROLE")),
-    pauser: ethers.keccak256(ethers.toUtf8Bytes("PAUSER_ROLE"))
+    pauser: ethers.keccak256(ethers.toUtf8Bytes("PAUSER_ROLE")),
 };
 
 export const addresses = {
@@ -20,7 +20,7 @@ export const interfaceIds = {
     IERC20: "0x36372b07",
     IERC20Metadata: "0xa219a025",
     IERC777: "0xe58e113c"
-};
+}; 
 
 export const errorMessages = {
     OWNER_ONLY: "Ownable: caller is not the owner",
@@ -33,5 +33,7 @@ export const errorMessages = {
     FUNCTION_NOT_RECOGNIZED: "Transaction reverted: function selector was not recognized and there's no fallback function",
     CUSTOM_ACCESS_CONTROL: (arg1: string, arg2: string) => "UnauthorizedAccess", //TODO: why won't args work? (arg1: string, arg2: string) => `UnauthorizedAccess("${arg1}", "${arg2}")`,
     ACCESS_CONTROL_RENOUNCE: "AccessControl: can only renounce roles for self",
-    CONTRACT_ALREADY_INITIALIZED: "Initializable: contract is already initialized"
+    CONTRACT_ALREADY_INITIALIZED: "Initializable: contract is already initialized",
+    ZERO_ADDRESS: "ZeroAddressArgument",
+    ZERO_VALUE: "ZeroValueArgument",
 }

@@ -42,7 +42,7 @@ export async function listenForEvent(
     contract: any,
     eventName: string,
     triggerAction: any,
-    paramNames: string[],
+    paramNames: string[], 
     timeoutMs: number = 0
 ): Promise<any> {
     const output: any = await new Promise(async (resolve, reject) => {
@@ -113,7 +113,7 @@ export async function expectRevert(funcCall: any, revertMessage: string, params:
         }
         await expect(
             funcCall()
-        ).to.be.revertedWith(revertMessage);
+        ).to.be.revertedWith(revertMessage );
     }
     else {
         await expect(
@@ -162,6 +162,7 @@ export async function sleep(ms: number) {
 }
 
 export { revokeRole, grantRole, getSecurityManager } from "./security";
-export {
-    deploySecurityManager
-} from "../../lib/deployment"; 
+export { 
+    deploySecurityManager, 
+    deployWhitelist
+} from "../../scripts/lib/deployment"; 

@@ -1,34 +1,31 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
 import * as constants from "../constants";
 import { SecurityManager } from "typechain";
-import {
-    getTestAccounts,
+import { 
+    getTestAccounts, 
     deploySecurityManager,
-    expectEvent,
-    expectRevert,
-    grantRole
+    expectEvent
 } from "../utils";
 
 describe("SecurityManager", function () {
     let securityManager: SecurityManager;
-    let addresses: any = {};
-    let accounts: any = {};
-
+    let addresses: any = { };
+    let accounts: any = { };
+    
     this.beforeEach(async function () {
-        let acc = await getTestAccounts(['admin', 'nonAdmin1', 'nonAdmin2']);
+        let acc = await getTestAccounts(['admin', 'nonAdmin1', 'nonAdmin2' ]);
         addresses = acc.addresses;
         accounts = acc.accounts;
-
+        
         securityManager = await deploySecurityManager(addresses.admin);
     });
 
     describe("Construction", function () {
         //TODO: (TEST) initial values
-
+        
         it("can grant admin to self", async function () {
             const secMan = await deploySecurityManager(addresses.admin);
-
+            
             expect(await secMan.hasRole(constants.roles.admin, addresses.admin)).to.be.true;
             expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
             expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
@@ -36,7 +33,7 @@ describe("SecurityManager", function () {
 
         it("can grant admin to a different address at construction", async function () {
             const secMan = await deploySecurityManager(addresses.nonAdmin1);
-
+            
             expect(await secMan.hasRole(constants.roles.admin, addresses.admin)).to.be.false;
             expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.true;
             expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
@@ -79,7 +76,7 @@ describe("SecurityManager", function () {
             await secMan.connect(accounts.nonAdmin1).revokeRole(constants.roles.admin, addresses.admin);
             await secMan.connect(accounts.nonAdmin1).grantRole(constants.roles.admin, addresses.nonAdmin2);
             await secMan.connect(accounts.nonAdmin2).revokeRole(constants.roles.admin, addresses.nonAdmin1);
-
+            
             //in the end, adminship has passed from admin to nonAdmin1 to nonAdmin2
             expect(await secMan.hasRole(constants.roles.admin, addresses.admin)).to.be.false;
             expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
@@ -95,7 +92,7 @@ describe("SecurityManager", function () {
 
         it('roleRevoked event fires on revokeRole', async () => {
             await securityManager.grantRole(constants.roles.admin, addresses.nonAdmin1);
-
+            
             expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.true;
             expectEvent(async () => await securityManager.revokeRole(constants.roles.admin, addresses.nonAdmin1),
                 "RoleRevoked", [constants.roles.admin, addresses.nonAdmin1, addresses.admin]);

@@ -10,7 +10,7 @@ pragma solidity ^0.8.7;
  * See also { SecurityManager }
  * 
  * @author John R. Kosinski
- * Loadpipe.io 2023
+ * Zeppelin Finance 2023
  */
 interface ISecurityManager  {
     

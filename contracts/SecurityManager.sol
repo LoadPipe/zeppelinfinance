@@ -3,6 +3,7 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./interfaces/ISecurityManager.sol"; 
+import "./interfaces/IWhitelist.sol"; 
 
 /**
  * @title SecurityManager 
@@ -17,12 +18,11 @@ import "./interfaces/ISecurityManager.sol";
  * This contract can manage security for multiple contracts at once. 
  * 
  * @author John R. Kosinski
- * Loadpipe.io 2023
+ * Zeppelin Finance 2023
  */
 contract SecurityManager is AccessControl, ISecurityManager {
+
     bytes32 public constant ADMIN_ROLE = 0x0;
-    bytes32 public constant BUYER_ROLE = keccak256(abi.encodePacked("BUYER_ROLE"));
-    bytes32 public constant NFT_SELLER_ROLE = keccak256(abi.encodePacked("NFT_SELLER_ROLE"));
     
     /**
      * Constructs the instance, granting the initial role(s). 
