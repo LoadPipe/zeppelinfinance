@@ -1,0 +1,37 @@
+import { ethers } from "ethers";
+
+export const roles = {
+    admin: "0x0000000000000000000000000000000000000000000000000000000000000000",
+    upgrader: ethers.keccak256(ethers.toUtf8Bytes("UPGRADER_ROLE")),
+    whitelistManager: ethers.keccak256(ethers.toUtf8Bytes("WHITELIST_MANAGER_ROLE")),
+    pauser: ethers.keccak256(ethers.toUtf8Bytes("PAUSER_ROLE"))
+};
+
+export const addresses = {
+    zeroAddress: "0x0000000000000000000000000000000000000000"
+}
+
+export const interfaceIds = {
+    IERC2981: "0x2a55205a",
+    IERC165: "0x01ffc9a7",
+    IAccessControl: "0x7965db0b",
+    IERC721: "0x80ac58cd",
+    IERC721Enumerable: "0x780e9d63",
+    IERC20: "0x36372b07",
+    IERC20Metadata: "0xa219a025",
+    IERC777: "0xe58e113c"
+};
+
+export const errorMessages = {
+    OWNER_ONLY: "Ownable: caller is not the owner",
+    PAUSED: "Pausable: paused",
+    NOT_PAUSED: "Pausable: not paused",
+    TRANSFER_WHEN_PAUSED: "ERC721Pausable: token transfer while paused",
+    TRANSFER_NOT_OWNER: "ERC721: caller is not token owner or approved",
+    ACCESS_CONTROL: "AccessControl:",
+    LOWLEVEL_DELEGATE_CALL: "Address: low-level delegate call failed",
+    FUNCTION_NOT_RECOGNIZED: "Transaction reverted: function selector was not recognized and there's no fallback function",
+    CUSTOM_ACCESS_CONTROL: (arg1: string, arg2: string) => "UnauthorizedAccess", //TODO: why won't args work? (arg1: string, arg2: string) => `UnauthorizedAccess("${arg1}", "${arg2}")`,
+    ACCESS_CONTROL_RENOUNCE: "AccessControl: can only renounce roles for self",
+    CONTRACT_ALREADY_INITIALIZED: "Initializable: contract is already initialized"
+}
