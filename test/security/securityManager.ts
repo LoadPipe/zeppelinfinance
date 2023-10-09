@@ -30,6 +30,9 @@ describe("SecurityManager", function () {
             expect(await securityManager.hasRole(constants.roles.admin, addresses.admin)).to.be.true;
             expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
             expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
+
+            expect(await securityManager.buyerWhitelist()).to.equal(constants.addresses.zeroAddress);
+            expect(await securityManager.sellerWhitelist()).to.equal(constants.addresses.zeroAddress);
         }); 
 
         it("can grant admin to a different address at construction", async function () {
