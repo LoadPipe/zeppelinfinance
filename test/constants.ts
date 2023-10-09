@@ -5,7 +5,8 @@ export const roles = {
     upgrader: ethers.keccak256(ethers.toUtf8Bytes("UPGRADER_ROLE")), 
     whitelistManager: ethers.keccak256(ethers.toUtf8Bytes("WHITELIST_MANAGER_ROLE")),
     pauser: ethers.keccak256(ethers.toUtf8Bytes("PAUSER_ROLE")),
-    nftIssuer: ethers.keccak256(ethers.toUtf8Bytes("NFT_ISSUER_ROLE"))
+    nftIssuer: ethers.keccak256(ethers.toUtf8Bytes("NFT_ISSUER_ROLE")),
+    nftSeller: ethers.keccak256(ethers.toUtf8Bytes("NFT_SELLER_ROLE"))
 };
 
 export const addresses = {
@@ -40,4 +41,5 @@ export const errorMessages = {
     FIELD_NOT_FOUND: "FieldNotFound",
     UNAUTHORIZED_ACCESS: "UnauthorizedAccess",
     INVALID_CONTRACT_METHOD: "Transaction reverted: function selector was not recognized and there's no fallback function",
+    NOT_NFT_OWNER: (callerAddr: string, nftAddr: string) => "CallerNotNftOwner",
 }
