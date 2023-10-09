@@ -3,6 +3,7 @@ import {
     deploySecurityManager,
     deployWhitelist,
     deployProductNft,
+    deployProductNftFactory,
     deployContractSizer,
     getTestAddresses
 } from "./utils";
@@ -11,7 +12,8 @@ import {
     ContractSizer,
     SecurityManager,
     Whitelist,
-    ProductNft
+    ProductNft,
+    ProductNftFactory
 } from "typechain";
 
 //TODO: (TEST) size all contracts
@@ -19,6 +21,7 @@ import {
 describe("Contract Sizes", function () {
     let contractSizer: ContractSizer;
     let productNft: ProductNft;
+    let productNftFactory: ProductNftFactory; 
     let securityManager: SecurityManager;
     let whitelist: Whitelist;
 
@@ -30,7 +33,8 @@ describe("Contract Sizes", function () {
         await securityManager.grantRole(constants.roles.nftIssuer, addresses.admin);
 
         whitelist = await deployWhitelist(securityManager.target.toString());
-        productNft = await deployProductNft(securityManager.target.toString(), addresses.admin, "hey", "jude");
+        productNft = await deployProductNft(securityManager.target.toString(), addresses.admin);
+        productNftFactory = await deployProductNftFactory(securityManager.target);
     });
 
     describe("Read Contract Sizes", function () {
@@ -38,15 +42,15 @@ describe("Contract Sizes", function () {
             const contractNames = [
                 "ProductNft",
                 "Whitelist",
-                "SecurityManager"
+                "SecurityManager", 
+                "ProductNftFactory"
             ];
             const contractSizes = await Promise.all([
                 contractSizer.getContractSize(productNft.target.toString()),
                 contractSizer.getContractSize(whitelist.target.toString()),
                 contractSizer.getContractSize(securityManager.target.toString()),
+                contractSizer.getContractSize(productNftFactory.target.toString()),
             ]);
-            
-            console.log(contractSizes);
 
             const warningLimit = 23000;
             const errorLimit = 23750;

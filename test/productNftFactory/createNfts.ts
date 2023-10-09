@@ -50,4 +50,6 @@ describe("ProductNftFactory: Create NFTs", function () {
             expect(parseInt(await productNft.totalMinted())).to.equal(0);
         });
     });
+    
+    //TODO: (TEST) more ProductNftFactory tests
 });
