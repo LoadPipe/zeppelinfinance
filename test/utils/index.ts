@@ -143,6 +143,7 @@ export {
     deploySecurityManager, 
     deployWhitelist, 
     deployProductNft, 
-    deployProductNftFactory, 
+    deployProductNftFactory,
+    deployProductNftIssuer, 
     deployContractSizer
 } from "../../scripts/lib/deployment"; 

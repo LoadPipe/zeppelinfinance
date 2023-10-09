@@ -4,7 +4,8 @@ import {
     Whitelist, 
     ContractSizer, 
     ProductNft, 
-    ProductNftFactory
+    ProductNftFactory,
+    ProductNftIssuer
 } from "typechain";
 import { Addressable } from "ethers";
 
@@ -68,4 +69,23 @@ export async function deployProductNftFactory(
     ));
 
     return (await factory.deploy(securityMgrAddr)) as ProductNftFactory;
+}
+
+export async function deployProductNftIssuer(
+    securityMgrAddr: string | Addressable,
+    nftFactoryAddr: string | Addressable | null = null
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "ProductNftIssuer",
+        accounts[0]
+    ));
+
+    //create nft factory if no address is supplied 
+    if (!nftFactoryAddr) {
+        const nftFactory = await deployProductNftFactory(securityMgrAddr);
+        nftFactoryAddr = nftFactory.target.toString();
+    }
+
+    return (await factory.deploy(securityMgrAddr, nftFactoryAddr)) as ProductNftIssuer;
 }

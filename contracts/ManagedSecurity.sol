@@ -24,6 +24,7 @@ abstract contract ManagedSecurity is Context {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
     bytes32 public constant NFT_ISSUER_ROLE = keccak256("NFT_ISSUER_ROLE");
+    bytes32 public constant NFT_SELLER_ROLE = keccak256("NFT_SELLER_ROLE");
     
     //thrown when the onlyRole modifier reverts 
     error UnauthorizedAccess(bytes32 roleId, address addr); 
