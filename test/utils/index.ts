@@ -164,5 +164,6 @@ export async function sleep(ms: number) {
 export { revokeRole, grantRole, getSecurityManager } from "./security";
 export { 
     deploySecurityManager, 
-    deployWhitelist
+    deployWhitelist, 
+    deployProductNft
 } from "../../scripts/lib/deployment"; 

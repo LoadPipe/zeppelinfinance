@@ -123,7 +123,7 @@ describe("Whitelist: Adding/Removing", function () {
     });
     
     describe("Events", function () {
-        it('WhitelistOnOffChanged fires when turned on', async () => {
+        it("WhitelistOnOffChanged fires when turned on", async () => {
             let eventFired: boolean = false;
 
             //turn whitelist off first 
@@ -144,7 +144,7 @@ describe("Whitelist: Adding/Removing", function () {
             expect(eventOutput.onOff).to.equal(true); 
         });
 
-        it('WhitelistOnOffChanged fires when turned off', async () => {
+        it("WhitelistOnOffChanged fires when turned off", async () => {
 
             //turn whitelist off first 
             await whitelist.connect(accounts.whitelistManager).setWhitelistOnOff(true);
@@ -164,7 +164,7 @@ describe("Whitelist: Adding/Removing", function () {
             expect(eventOutput.onOff).to.equal(false); 
         });
 
-        it('WhitelistOnOffChanged doesnt fire if no actual change', async () => {
+        it("WhitelistOnOffChanged doesnt fire if no actual change", async () => {
 
             //turn whitelist off first 
             await whitelist.connect(accounts.whitelistManager).setWhitelistOnOff(true);
@@ -183,7 +183,7 @@ describe("Whitelist: Adding/Removing", function () {
             expect(eventOutput.eventFired).to.be.false;
         });
 
-        it('WhitelistAddedRemoved fires when single added', async () => {
+        it("WhitelistAddedRemoved fires when single added", async () => {
 
             //ensure that address is not yet whitelisted 
             expect(await whitelist.isWhitelisted(addresses.addr1)).to.be.false; 
@@ -203,7 +203,7 @@ describe("Whitelist: Adding/Removing", function () {
             expect(eventOutput.addRemove).to.equal(true); 
         });
 
-        it('WhitelistAddedRemoved doesnt fire if no actual change', async () => {
+        it("WhitelistAddedRemoved doesnt fire if no actual change", async () => {
 
             //ensure that address is not yet whitelisted 
             expect(await whitelist.isWhitelisted(addresses.addr1)).to.be.false;
@@ -221,7 +221,7 @@ describe("Whitelist: Adding/Removing", function () {
             expect(eventOutput.eventFired).to.be.false;
         });
 
-        it('WhitelistAddedRemoved fires when bulk added', async () => {
+        it("WhitelistAddedRemoved fires when bulk added", async () => {
 
             //ensure that address is not yet whitelisted 
             expect(await whitelist.isWhitelisted(addresses.addr1)).to.be.false;
@@ -250,7 +250,7 @@ describe("Whitelist: Adding/Removing", function () {
             expect(eventOutput.find(i => i.address == addresses.addr2)).to.be.not.null;
         });
 
-        it('WhitelistAddedRemoved fires when single removed', async () => {
+        it("WhitelistAddedRemoved fires when single removed", async () => {
             
             //ensure that address is added to whitelist 
             await whitelist.connect(accounts.whitelistManager).addRemoveWhitelist(addresses.addr1, true); 
@@ -271,7 +271,7 @@ describe("Whitelist: Adding/Removing", function () {
             expect(eventOutput.addRemove).to.equal(false); 
         });
 
-        it('WhitelistAddedRemoved fires when bulk removed', async () => {
+        it("WhitelistAddedRemoved fires when bulk removed", async () => {
             //ensure that address is added to whitelist 
             await whitelist.connect(accounts.whitelistManager).addRemoveWhitelist(addresses.addr1, true);
             expect(await whitelist.isWhitelisted(addresses.addr1)).to.be.true;

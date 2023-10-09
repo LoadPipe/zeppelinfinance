@@ -13,13 +13,11 @@ describe("Whitelist: Construction", function () {
     let whitelist: Whitelist;
     let securityManager: SecurityManager;
     let addresses: any = {};
-    let accounts: any = {};
 
     this.beforeEach(async function () {
         let acc = await getTestAccounts(['admin', 'addr1', 'addr2', 'whitelistManager', 'whitelisted', 'nonWhitelisted']);
         addresses = acc.addresses;
-        accounts = acc.accounts;
-        
+
         securityManager = await deploySecurityManager(addresses.admin);
         whitelist = await deployWhitelist(securityManager.target);
         
@@ -28,7 +26,7 @@ describe("Whitelist: Construction", function () {
     });
 
     describe("Construction", function () {
-        it("initial property values", async function () {
+        it("initial state", async function () {
             expect(await whitelist.whitelistOn()).to.equal(true);
             expect(await whitelist.securityManager()).to.equal(securityManager.target);
         });
