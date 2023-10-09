@@ -21,15 +21,11 @@ describe("SecurityManager", function () {
     });
 
     describe("Construction", function () {
-        //TODO: (TEST) initial values
-        
-        it("can grant admin to self", async function () {
-            const secMan = await deploySecurityManager(addresses.admin);
-            
-            expect(await secMan.hasRole(constants.roles.admin, addresses.admin)).to.be.true;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
-        });
+        it("initial state", async function () {
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.admin)).to.be.true;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
+        }); 
 
         it("can grant admin to a different address at construction", async function () {
             const secMan = await deploySecurityManager(addresses.nonAdmin1);
@@ -42,55 +38,49 @@ describe("SecurityManager", function () {
 
     describe("Transfer Adminship", function () {
         it("can grant admin to self", async function () {
-            const secMan = await deploySecurityManager(addresses.admin);
+            await securityManager.grantRole(constants.roles.admin, addresses.admin);
 
-            await secMan.grantRole(constants.roles.admin, addresses.admin);
-
-            expect(await secMan.hasRole(constants.roles.admin, addresses.admin)).to.be.true;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.admin)).to.be.true;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
         });
 
         it("can transfer admin to another", async function () {
-            const secMan = await deploySecurityManager(addresses.admin);
-
-            await secMan.grantRole(constants.roles.admin, addresses.nonAdmin1);
+            await securityManager.grantRole(constants.roles.admin, addresses.nonAdmin1);
 
             //now there are two admins
-            expect(await secMan.hasRole(constants.roles.admin, addresses.admin)).to.be.true;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.true;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.admin)).to.be.true;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.true;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
 
-            await secMan.connect(accounts.nonAdmin1).revokeRole(constants.roles.admin, addresses.admin);
+            await securityManager.connect(accounts.nonAdmin1).revokeRole(constants.roles.admin, addresses.admin);
 
             //now origin admin has had adminship revoked 
-            expect(await secMan.hasRole(constants.roles.admin, addresses.admin)).to.be.false;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.true;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.admin)).to.be.false;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.true;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.false;
         });
 
         it("can pass adminship along", async function () {
-            const secMan = await deploySecurityManager(addresses.admin);
-
-            await secMan.grantRole(constants.roles.admin, addresses.nonAdmin1);
-            await secMan.connect(accounts.nonAdmin1).revokeRole(constants.roles.admin, addresses.admin);
-            await secMan.connect(accounts.nonAdmin1).grantRole(constants.roles.admin, addresses.nonAdmin2);
-            await secMan.connect(accounts.nonAdmin2).revokeRole(constants.roles.admin, addresses.nonAdmin1);
+            await securityManager.grantRole(constants.roles.admin, addresses.nonAdmin1);
+            await securityManager.connect(accounts.nonAdmin1).revokeRole(constants.roles.admin, addresses.admin);
+            await securityManager.connect(accounts.nonAdmin1).grantRole(constants.roles.admin, addresses.nonAdmin2);
+            await securityManager.connect(accounts.nonAdmin2).revokeRole(constants.roles.admin, addresses.nonAdmin1);
             
             //in the end, adminship has passed from admin to nonAdmin1 to nonAdmin2
-            expect(await secMan.hasRole(constants.roles.admin, addresses.admin)).to.be.false;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
-            expect(await secMan.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.true;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.admin)).to.be.false;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.false;
+            expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin2)).to.be.true;
         });
     });
 
     describe("Events", function () {
-        it('rolegranted event fires on grantRole', async () => {
+        it("rolegranted event fires on grantRole", async () => {
             expectEvent(async () => await securityManager.grantRole(constants.roles.admin, addresses.nonAdmin1),
                 "RoleGranted", [constants.roles.admin, addresses.nonAdmin1, addresses.admin]);
         });
 
-        it('roleRevoked event fires on revokeRole', async () => {
+        it("roleRevoked event fires on revokeRole", async () => {
             await securityManager.grantRole(constants.roles.admin, addresses.nonAdmin1);
             
             expect(await securityManager.hasRole(constants.roles.admin, addresses.nonAdmin1)).to.be.true;
@@ -98,7 +88,7 @@ describe("SecurityManager", function () {
                 "RoleRevoked", [constants.roles.admin, addresses.nonAdmin1, addresses.admin]);
         });
 
-        it('roleRevoked event fires on renounceRole', async () => {
+        it("roleRevoked event fires on renounceRole", async () => {
             expectEvent(async () => await securityManager.renounceRole(constants.roles.admin, addresses.admin),
                 "RoleRevoked", [constants.roles.admin, addresses.nonAdmin1, addresses.admin]);
         });
