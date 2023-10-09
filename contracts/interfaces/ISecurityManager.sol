@@ -21,4 +21,20 @@ interface ISecurityManager  {
      * @param account Does this account have the specified role?
      */
     function hasRole(bytes32 role, address account) external returns (bool); 
+    
+    /**
+     * Determines whether or not the given account is provisioned, whitelisted, and in 
+     * every other way authorized to be a buyer.
+     * 
+     * @param account The account in question. 
+     */
+    function isAuthorizedBuyer(address account) external returns (bool); 
+    
+    /**
+     * Determines whether or not the given account is provisioned, whitelisted, and in 
+     * every other way authorized to be a seller.
+     * 
+     * @param account The account in question. 
+     */
+    function isAuthorizedSeller(address account) external returns (bool); 
 }

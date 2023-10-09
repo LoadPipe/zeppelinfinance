@@ -11,7 +11,7 @@ import { ProductNft, SecurityManager } from "typechain";
 import * as constants from "../constants";
 
 
-describe("ProductNft", function () {
+describe("ProductNft: Transfer", function () {
     let productNft: ProductNft;
     let securityManager: SecurityManager;
 

@@ -21,8 +21,12 @@ import "./interfaces/IWhitelist.sol";
  * Zeppelin Finance 2023
  */
 contract SecurityManager is AccessControl, ISecurityManager {
+    IWhitelist public buyerWhitelist;
+    IWhitelist public sellerWhitelist;
 
     bytes32 public constant ADMIN_ROLE = 0x0;
+    bytes32 public constant BUYER_ROLE = keccak256(abi.encodePacked("BUYER_ROLE"));
+    bytes32 public constant NFT_SELLER_ROLE = keccak256(abi.encodePacked("NFT_SELLER_ROLE"));
     
     /**
      * Constructs the instance, granting the initial role(s). 
@@ -81,5 +85,56 @@ contract SecurityManager is AccessControl, ISecurityManager {
         if (account != msg.sender || role != ADMIN_ROLE) {
             super.revokeRole(role, account);
         }
+    }
+    
+    /**
+     * Determines whether or not the given account is provisioned, whitelisted, and in 
+     * every other way authorized to be a buyer.
+     * 
+     * @param account The account in question. 
+     */
+    //TODO: (TEST) test this 
+    function isAuthorizedBuyer(address account) external view returns (bool) {
+        if (address(buyerWhitelist) != address(0)) {
+            return buyerWhitelist.isWhitelisted(account);
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Determines whether or not the given account is provisioned, whitelisted, and in 
+     * every other way authorized to be a seller.
+     * 
+     * @param account The account in question. 
+     */
+    //TODO: (TEST) test this 
+    function isAuthorizedSeller(address account) external view returns (bool) {
+        if (hasRole(NFT_SELLER_ROLE, account)) {
+            if (address(sellerWhitelist) != address(0)) {
+                return sellerWhitelist.isWhitelisted(account);
+            }
+            return true;
+        }
+        
+        return false;
+    } 
+    
+    /**
+     * Sets an IWhitelist instance to be the whitelist containing whitelisted buyers.
+     * 
+     * @param whitelist The IWhitelist instance to set as buyer whitelist. 
+     */
+    function setBuyerWhitelist(IWhitelist whitelist) external onlyRole(ADMIN_ROLE) {
+        buyerWhitelist = whitelist;
+    }
+    
+    /**
+     * Sets an IWhitelist instance to be the whitelist containing whitelisted sellers.
+     * 
+     * @param whitelist The IWhitelist instance to set as seller whitelist. 
+     */
+    function setSellerWhitelist(IWhitelist whitelist) external onlyRole(ADMIN_ROLE) {
+        sellerWhitelist = whitelist;
     }
 }
