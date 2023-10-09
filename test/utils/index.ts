@@ -72,29 +72,6 @@ export async function listenForEvent(
 }
 
 /**
- * Verifies that a specific event was NOT fired as a result of some action. 
- * @param {lambda} funcCall A remote call that should trigger the event.  
- * @param {string} eventName The name of the event that is not expected. 
- * @param {lanbda} customFunc Custom assertions, takes events as argument. 
- */
-//TODO: (TEST) call types explicitly & correctly
-export async function expectNoEvent(funcCall: any, eventName: string, customFunc: any) {
-    //call the remote function 
-    const tx = await funcCall();
-    const rc = await tx.wait();
-
-    //expect that the event was fired
-    const evt = rc.events.find((e: any) => e.event === eventName);
-
-    expect(evt.args).to.be.undefined;
-
-    if (customFunc)
-        customFunc(evt);
-    else
-        expect(evt).to.be.undefined;
-}
-
-/**
  * Verifies that a smart contract call that is expected to revert, reverts with the 
  * expected error message. 
  * @param {lambda} funcCall A smart contract call that is expected to revert

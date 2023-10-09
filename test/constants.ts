@@ -39,4 +39,5 @@ export const errorMessages = {
     ZERO_VALUE: "ZeroValueArgument",
     FIELD_NOT_FOUND: "FieldNotFound",
     UNAUTHORIZED_ACCESS: "UnauthorizedAccess",
+    INVALID_CONTRACT_METHOD: "Transaction reverted: function selector was not recognized and there's no fallback function",
 }

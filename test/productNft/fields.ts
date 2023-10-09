@@ -9,7 +9,7 @@ import { ProductNft, SecurityManager } from "typechain";
 import { expectRevert } from "../utils";
 import * as constants from "../constants";
 
-//TODO: (TEST) standardize test headers 
+
 describe("ProductNft: Fields", function () {
     let productNft: ProductNft;
     let securityManager: SecurityManager;
