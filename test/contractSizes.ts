@@ -37,11 +37,6 @@ describe("Contract Sizes", function () {
         it("contract sizes", async function () {
             const contractNames = [
                 "ProductNft",
-                "ProductNftFactory",
-                "ProductNftStore",
-                "ProductNftIssuer",
-                "AffiliatePayout",
-                "ZeppelinOracle",
                 "Whitelist",
                 "SecurityManager"
             ];
@@ -50,6 +45,8 @@ describe("Contract Sizes", function () {
                 contractSizer.getContractSize(whitelist.target.toString()),
                 contractSizer.getContractSize(securityManager.target.toString()),
             ]);
+            
+            console.log(contractSizes);
 
             const warningLimit = 23000;
             const errorLimit = 23750;

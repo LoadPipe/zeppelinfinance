@@ -142,5 +142,7 @@ export { revokeRole, grantRole, getSecurityManager } from "./security";
 export { 
     deploySecurityManager, 
     deployWhitelist, 
-    deployProductNft
+    deployProductNft, 
+    deployProductNftFactory, 
+    deployContractSizer
 } from "../../scripts/lib/deployment"; 
