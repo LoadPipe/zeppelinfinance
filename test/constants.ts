@@ -42,4 +42,6 @@ export const errorMessages = {
     UNAUTHORIZED_ACCESS: "UnauthorizedAccess",
     INVALID_CONTRACT_METHOD: "Transaction reverted: function selector was not recognized and there's no fallback function",
     NOT_NFT_OWNER: (callerAddr: string, nftAddr: string) => "CallerNotNftOwner",
+    NFT_INSTANCE_UNAVAILABLE: (nftAddr: string, tokenId: number) => "NftInstanceUnavailable",
+    INSUFFICIENT_PAYMENT: (expected: number, actual: number) => "InsufficientPayment",
 }

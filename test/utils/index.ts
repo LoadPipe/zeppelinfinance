@@ -145,5 +145,6 @@ export {
     deployProductNft, 
     deployProductNftFactory,
     deployProductNftIssuer, 
+    deployProductNftStore,
     deployContractSizer
 } from "../../scripts/lib/deployment"; 

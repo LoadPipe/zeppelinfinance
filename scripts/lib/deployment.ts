@@ -73,7 +73,8 @@ export async function deployProductNftFactory(
 
 export async function deployProductNftIssuer(
     securityMgrAddr: string | Addressable,
-    nftFactoryAddr: string | Addressable | null = null
+    nftFactoryAddr: string | Addressable | null = null,
+    storeAddr: string | Addressable | null = null
 ) {
     const accounts = await ethers.getSigners();
     const factory: any = (await ethers.getContractFactory(
@@ -87,5 +88,23 @@ export async function deployProductNftIssuer(
         nftFactoryAddr = nftFactory.target.toString();
     }
 
-    return (await factory.deploy(securityMgrAddr, nftFactoryAddr)) as ProductNftIssuer;
+    //create store if no address is supplied 
+    if (!storeAddr) {
+        const nftStore = await deployProductNftStore(securityMgrAddr);
+        storeAddr = nftStore.target.toString();
+    }
+
+    return (await factory.deploy(securityMgrAddr, nftFactoryAddr, storeAddr)) as ProductNftIssuer;
+}
+
+export async function deployProductNftStore(
+    securityMgrAddr: string | Addressable
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "ProductNftStore",
+        accounts[0]
+    ));
+
+    return (await factory.deploy(securityMgrAddr)) as ProductNftStore; 
 }
