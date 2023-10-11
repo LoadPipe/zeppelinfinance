@@ -108,3 +108,17 @@ export async function deployProductNftStore(
 
     return (await factory.deploy(securityMgrAddr)) as ProductNftStore; 
 }
+
+export async function deployZeppelinOracle(
+    securityMgrAddr: string | Addressable
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "ZeppelinOracle",
+        accounts[0]
+    ));
+
+    return (await factory.deploy(securityMgrAddr)) as ZeppelinOracle;
+}
+
+

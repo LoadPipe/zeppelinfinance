@@ -6,7 +6,8 @@ export const roles = {
     whitelistManager: ethers.keccak256(ethers.toUtf8Bytes("WHITELIST_MANAGER_ROLE")),
     pauser: ethers.keccak256(ethers.toUtf8Bytes("PAUSER_ROLE")),
     nftIssuer: ethers.keccak256(ethers.toUtf8Bytes("NFT_ISSUER_ROLE")),
-    nftSeller: ethers.keccak256(ethers.toUtf8Bytes("NFT_SELLER_ROLE"))
+    nftSeller: ethers.keccak256(ethers.toUtf8Bytes("NFT_SELLER_ROLE")), 
+    system: ethers.keccak256(ethers.toUtf8Bytes("SYSTEM_ROLE")),
 };
 
 export const addresses = {

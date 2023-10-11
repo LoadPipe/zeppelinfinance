@@ -146,5 +146,6 @@ export {
     deployProductNftFactory,
     deployProductNftIssuer, 
     deployProductNftStore,
+    deployZeppelinOracle,
     deployContractSizer
 } from "../../scripts/lib/deployment"; 
