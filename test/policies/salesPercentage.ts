@@ -94,5 +94,9 @@ describe("Policies: SalesPercentage", function () {
             expect(policies.length).to.equal(1);
             expect(policies[0]).to.equal(rewardPolicy.target.toString());
         });
+
+        it("can generate rewards for a policy", async function () {
+            //TODO: (TEST) test this 
+        });
     });
 });
