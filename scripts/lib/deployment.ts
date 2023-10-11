@@ -121,4 +121,19 @@ export async function deployZeppelinOracle(
     return (await factory.deploy(securityMgrAddr)) as ZeppelinOracle;
 }
 
+export async function deployFinancingRewardPolicy(
+    percentageBps: number,
+    inventoryLimit: number = 0,
+    shared: boolean = false,
+    fillOrKill: boolean = false
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "FinancingRewardPolicy",
+        accounts[0]
+    ));
+
+    return await factory.deploy(percentageBps, inventoryLimit, shared, fillOrKill);
+}
+
 

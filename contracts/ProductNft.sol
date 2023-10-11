@@ -24,13 +24,18 @@ contract ProductNft is
     
     address _owner;
     uint256 internal lastTokenId;
+    address[] public policies;
+    mapping(address => bool) private policiesExist;
     mapping(bytes32 => string) fields; 
     mapping(uint256 => mapping(bytes32 => string)) instanceFields; 
+    
+    uint8 constant MAX_POLICIES = 10; 
     
     //errors
     error FieldNotFound();
     error TokenIdNotFound();
     error ArgumentException(string);
+    error MaxPoliciesExceeded();
     
     /**
      * Constructs a ProductNft instance.
@@ -204,6 +209,43 @@ contract ProductNft is
         bytes32 fieldKey = keccak256(abi.encodePacked(fieldName)); 
         instanceFields[tokenId][fieldKey] = fieldValue;
     } 
+    
+    /**
+     * Gets a list of addresses of contracts which define the policies that are attached 
+     * to this particular NFT. 
+     */
+    function getPolicies() external view returns (address[] memory) {
+        return policies;
+    }
+    
+    /**
+     * Associates the address of an { INftPolicy } conforming contract with this NFT. The
+     * specified contract defines a policy to be associated with this contract. See also 
+     * { getPolicies }. 
+     * 
+     * Reverts: 
+     * - {ZeroAddress} if `policy` is a zero address. 
+     * - {UnauthorizedAccess}: if caller is not authorized with the appropriate role. 
+     * 
+     * @param policy The address of a contract which defines the policy to attach.
+     */
+    function attachPolicy(
+        address policy
+    ) external onlyRole(NFT_ISSUER_ROLE) {
+        if (policy == address(0))
+            revert ZeroAddressArgument(); 
+        
+        //TODO: (TEST) add test for this 
+        if (policies.length >= MAX_POLICIES) {
+            revert MaxPoliciesExceeded();
+        }
+        
+        //TODO: (TEST) add test for this 
+        if (!policiesExist[policy]) {
+            policies.push(policy);
+            policiesExist[policy] = true;
+        }
+    }
     
     function _stringIsEmpty(string memory s) internal pure returns (bool) {
         bytes memory bytesVal = bytes(s); 

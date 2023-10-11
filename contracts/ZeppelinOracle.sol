@@ -14,8 +14,7 @@ import "./interfaces/IZeppelinOracle.sol";
  * Holds data on sales of a product, pushed from off-chain by an authorized account.
  * 
  * @author John R. Kosinski
- * Anduril Analytics 
- * Licensed to Loadpipe.io 2023
+ * Zeppelin Finance 2023
  */
 //TODO: (DESIGN) make upgradeable 
 contract ZeppelinOracle is
