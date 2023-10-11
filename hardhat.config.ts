@@ -59,6 +59,21 @@ module.exports = {
             accounts: [`${process.env.PRIVATE_KEY}`],
             chainId: 97, 
             url: `https://data-seed-prebsc-1-s3.binance.org:8545`
+        },
+        zkevm_testnet: {
+            accounts: [`${process.env.PRIVATE_KEY}`],
+            chainId: 1442,
+            url: `https://rpc.public.zkevm-test.net`
+        },
+        mantle_testnet: {
+            accounts: [`${process.env.PRIVATE_KEY}`],
+            chainId: 5001,
+            url: `https://rpc.testnet.mantle.xyz`
+        },
+        filecoin_testnet: {
+            accounts: [`${process.env.PRIVATE_KEY}`],
+            chainId: 314159,
+            url: `https://filecoin-calibration.chainup.net/rpc/v1`
         }
     },
     etherscan: {
