@@ -147,6 +147,7 @@ export {
     deployProductNftIssuer, 
     deployProductNftStore,
     deployZeppelinOracle,
+    deployAffiliatePayout,
     deployFinancingRewardPolicy,
     deployAffiliateRewardPolicy,
     deployContractSizer

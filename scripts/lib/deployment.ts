@@ -132,6 +132,24 @@ export async function deployZeppelinOracle(
     return (await factory.deploy(securityMgrAddr)) as ZeppelinOracle;
 }
 
+export async function deployAffiliatePayout(
+    securityMgrAddr: string | Addressable,
+    zeppelinAddr: string | Addressable | null = null
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "AffiliatePayout",
+        accounts[0]
+    ));
+
+    if (!zeppelinAddr) {
+        const zeppelin = await deployZeppelinOracle(securityMgrAddr);
+        zeppelinAddr = zeppelin.target.toString();
+    }
+
+    return (await factory.deploy(securityMgrAddr, zeppelinAddr)) as AffiliatePayout;
+}
+
 export async function deployFinancingRewardPolicy(
     percentageBps: number,
     inventoryLimit: number = 0,
