@@ -80,4 +80,21 @@ interface IProductNft is IERC721 {
      * @param fieldValue Value of the field to assign. 
      */
     function setInstanceField(uint256 tokenId, string calldata fieldName, string calldata fieldValue) external;
+    
+    /**
+     * Gets a list of addresses of contracts which define the policies that are attached 
+     * to this particular NFT. 
+     */
+    function getPolicies() external view returns (address[] memory);
+    
+    /**
+     * Associates the address of an { INftPolicy } conforming contract with this NFT. The
+     * specified contract defines a policy to be associated with this contract. See also 
+     * { getPolicies }. 
+     * 
+     * @param policy The address of a contract which defines the policy to attach.
+     */
+    function attachPolicy(
+        address policy
+    ) external; 
 }

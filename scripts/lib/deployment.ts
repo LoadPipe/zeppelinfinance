@@ -74,7 +74,8 @@ export async function deployProductNftFactory(
 export async function deployProductNftIssuer(
     securityMgrAddr: string | Addressable,
     nftFactoryAddr: string | Addressable | null = null,
-    storeAddr: string | Addressable | null = null
+    storeAddr: string | Addressable | null = null,
+    refundPolicyAddr: string | Addressable | null = null
 ) {
     const accounts = await ethers.getSigners();
     const factory: any = (await ethers.getContractFactory(
@@ -94,7 +95,17 @@ export async function deployProductNftIssuer(
         storeAddr = nftStore.target.toString();
     }
 
-    return (await factory.deploy(securityMgrAddr, nftFactoryAddr, storeAddr)) as ProductNftIssuer;
+    //create refund policy if no address is supplied 
+    if (!refundPolicyAddr) {
+        const factory: any = (await ethers.getContractFactory(
+            "NftRefundPolicy",
+            accounts[0]
+        ));
+        const refundPolicy = await factory.deploy(securityMgrAddr);
+        refundPolicyAddr = refundPolicy.target;
+    }
+
+    return (await factory.deploy(securityMgrAddr, nftFactoryAddr, storeAddr, refundPolicyAddr)) as ProductNftIssuer;
 }
 
 export async function deployProductNftStore(

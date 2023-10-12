@@ -4,6 +4,7 @@ pragma solidity ^0.8.7;
 import "./interfaces/IProductNftStore.sol";
 import "./interfaces/IProductNftFactory.sol";
 import "./interfaces/IProductNft.sol";
+import "./interfaces/INftPolicy.sol";
 import "./ManagedSecurity.sol";
 
 /**
@@ -27,6 +28,7 @@ import "./ManagedSecurity.sol";
 contract ProductNftIssuer is ManagedSecurity {
     IProductNftFactory public nftFactory;
     IProductNftStore public nftStore;
+    INftPolicy public refundPolicy;
     mapping(address => mapping(address => uint256)) sellersToNfts; 
     
     //errors 
@@ -71,12 +73,14 @@ contract ProductNftIssuer is ManagedSecurity {
     constructor(
         ISecurityManager securityManager, 
         IProductNftFactory _nftFactory,
-        IProductNftStore _nftStore
+        IProductNftStore _nftStore, 
+        INftPolicy _refundPolicy
     ) {
         _setSecurityManager(securityManager);
         
         nftFactory = _nftFactory;
         nftStore = _nftStore;
+        refundPolicy = _refundPolicy;
     }
     
     //STEP 1: create NFT 
@@ -120,7 +124,41 @@ contract ProductNftIssuer is ManagedSecurity {
         return address(nft);
     }
     
-    //STEP 2: mint 
+    //STEP 2: attach policies 
+    /**
+     * Attaches a policy to the specified NFT, if security criteria are met. This operation
+     * can only be performed before any tokens have been minted for the given NFT.
+     * 
+     * Reverts: 
+     * - { InvalidAction } if token minted quantity is > 0. 
+     * - {CallerNotNftOwner} if the caller is not the owner of the given NFT. 
+     * - {SellerNotAuthorized} if the caller is not an authorized seller. 
+     * - {UnauthorizedAccess}: if caller is not authorized with the appropriate role
+     * 
+     * @param nftAddress The address of an NFT to which to attach the policy.
+     * @param nftPolicy The address of a contract which defines the policy to attach.
+     */
+    function attachNftPolicy(
+        address nftAddress,
+        INftPolicy nftPolicy
+    ) external 
+        onlyRole(NFT_SELLER_ROLE) 
+        onlyNftOwner(nftAddress) 
+    {
+        IProductNft nft = IProductNft(nftAddress); 
+        if (nft.totalMinted() > 0) 
+            revert InvalidAction(); 
+        
+        //attach the policy 
+        nft.attachPolicy(address(nftPolicy));
+        
+        //if policy is fill-or-kill, attach refund policy 
+        if (nftPolicy.isFillOrKill()) {
+            nft.attachPolicy(address(refundPolicy));
+        }
+    }
+    
+    //STEP 3: mint 
     /**
      * Mints a given quantity of tokens for the specified NFT. 
      * 
@@ -177,7 +215,7 @@ contract ProductNftIssuer is ManagedSecurity {
         return lastTokenId;
     }
     
-    //STEP 3: post to store 
+    //STEP 4: post to store 
     /**
      * Posts the specified NFT for sale in the NftStore. 
      * 

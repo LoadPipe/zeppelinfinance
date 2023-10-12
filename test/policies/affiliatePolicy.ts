@@ -2,7 +2,6 @@ import { expect } from "chai";
 import {
     deploySecurityManager,
     deployAffiliateRewardPolicy,
-    deployZeppelinOracle,
     deployProductNftStore,
     deployProductNftIssuer,
     getTestAccounts
@@ -11,8 +10,7 @@ import {
     ProductNftIssuer,
     ProductNftStore,
     AffiliateRewardPolicy,
-    SecurityManager,
-    ZeppelinOracle
+    SecurityManager
 } from "typechain";
 import { Contract, Signer } from "ethers";
 import { ethers } from "hardhat";
@@ -22,11 +20,9 @@ import * as constants from "../constants";
 describe("Policies: SalesPercentage", function () {
     let securityManager: SecurityManager;
     let affiliatePolicy: AffiliateRewardPolicy;
-    let zeppelin: ZeppelinOracle;
     let nftStore: ProductNftStore;
     let nftIssuer: ProductNftIssuer;
     let nftFactory: Contract;
-
     let addresses: any = {};
     let accounts: any = {};
 
@@ -37,7 +33,6 @@ describe("Policies: SalesPercentage", function () {
 
         securityManager = await deploySecurityManager(addresses.admin);
         affiliatePolicy = await deployAffiliateRewardPolicy(100);
-        zeppelin = await deployZeppelinOracle(securityManager.target);
         nftStore = await deployProductNftStore(securityManager.target);
         nftIssuer = await deployProductNftIssuer(securityManager.target, null, nftStore.target);
         nftFactory = await ethers.getContractAt("ProductNftFactory", await nftIssuer.nftFactory());
