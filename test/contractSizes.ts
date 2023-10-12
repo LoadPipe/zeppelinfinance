@@ -4,6 +4,10 @@ import {
     deployWhitelist,
     deployProductNft,
     deployProductNftFactory,
+    deployProductNftIssuer,
+    deployProductNftStore,
+    deployZeppelinOracle,
+    deployAffiliatePayout,
     deployContractSizer,
     getTestAddresses
 } from "./utils";
@@ -13,17 +17,23 @@ import {
     SecurityManager,
     Whitelist,
     ProductNft,
-    ProductNftFactory
+    ProductNftFactory,
+    ProductNftIssuer,
+    ProductNftStore,
+    ZeppelinOracle,
+    AffiliatePayout
 } from "typechain";
-
-//TODO: (TEST) size all contracts
 
 describe("Contract Sizes", function () {
     let contractSizer: ContractSizer;
-    let productNft: ProductNft;
-    let productNftFactory: ProductNftFactory; 
     let securityManager: SecurityManager;
     let whitelist: Whitelist;
+    let productNft: ProductNft;
+    let productNftFactory: ProductNftFactory; 
+    let productNftIssuer: ProductNftIssuer;
+    let productNftStore: ProductNftStore;
+    let affiliatePayout: AffiliatePayout;
+    let zeppelin: ZeppelinOracle;
 
     this.beforeEach(async function () {
         const addresses = await getTestAddresses(["admin"]);
@@ -35,6 +45,12 @@ describe("Contract Sizes", function () {
         whitelist = await deployWhitelist(securityManager.target.toString());
         productNft = await deployProductNft(securityManager.target.toString(), addresses.admin);
         productNftFactory = await deployProductNftFactory(securityManager.target);
+        productNftStore = await deployProductNftStore(securityManager.target.toString());
+        zeppelin = await deployZeppelinOracle(securityManager.target.toString());
+        affiliatePayout = await deployAffiliatePayout(securityManager.target.toString(), zeppelin.target.toString());
+        productNftIssuer = await deployProductNftIssuer(
+            securityManager.target.toString(), productNftFactory.target.toString(), productNftStore.target.toString()
+        );
     });
 
     describe("Read Contract Sizes", function () {
@@ -42,14 +58,22 @@ describe("Contract Sizes", function () {
             const contractNames = [
                 "ProductNft",
                 "Whitelist",
-                "SecurityManager", 
-                "ProductNftFactory"
+                "SecurityManager",
+                "ProductNftFactory",
+                "ProductNftStore",
+                "ProductNftIssuer",
+                "AffiliatePayout",
+                "ZeppelinOracle"
             ];
             const contractSizes = await Promise.all([
                 contractSizer.getContractSize(productNft.target.toString()),
-                contractSizer.getContractSize(whitelist.target.toString()),
-                contractSizer.getContractSize(securityManager.target.toString()),
                 contractSizer.getContractSize(productNftFactory.target.toString()),
+                contractSizer.getContractSize(productNftStore.target.toString()),
+                contractSizer.getContractSize(productNftIssuer.target.toString()),
+                contractSizer.getContractSize(affiliatePayout.target.toString()),
+                contractSizer.getContractSize(zeppelin.target.toString()),
+                contractSizer.getContractSize(whitelist.target.toString()),
+                contractSizer.getContractSize(securityManager.target.toString())
             ]);
 
             const warningLimit = 23000;
