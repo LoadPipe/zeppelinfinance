@@ -148,5 +148,6 @@ export {
     deployProductNftStore,
     deployZeppelinOracle,
     deployFinancingRewardPolicy,
+    deployAffiliateRewardPolicy,
     deployContractSizer
 } from "../../scripts/lib/deployment"; 

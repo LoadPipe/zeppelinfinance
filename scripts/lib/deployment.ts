@@ -136,4 +136,16 @@ export async function deployFinancingRewardPolicy(
     return await factory.deploy(percentageBps, inventoryLimit, shared, fillOrKill);
 }
 
+export async function deployAffiliateRewardPolicy(
+    percentageBps: number
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "AffiliateRewardPolicy",
+        accounts[0]
+    ));
+
+    return await factory.deploy(percentageBps);
+}
+
 
