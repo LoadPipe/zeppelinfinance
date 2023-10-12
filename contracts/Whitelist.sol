@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
 import "./interfaces/IWhitelist.sol";
@@ -16,6 +16,7 @@ import "./ManagedSecurity.sol";
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 contract Whitelist is IWhitelist, ManagedSecurity {
     mapping(address => bool) private whitelisted;   //stores the whitelist 

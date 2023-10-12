@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
@@ -13,6 +13,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 interface IProductNft is IERC721 {
     

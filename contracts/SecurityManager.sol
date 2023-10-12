@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
@@ -19,6 +19,7 @@ import "./interfaces/IWhitelist.sol";
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 contract SecurityManager is AccessControl, ISecurityManager {
     IWhitelist public buyerWhitelist;

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 
 import "./IProductNft.sol";
 
@@ -13,6 +13,7 @@ pragma solidity ^0.8.7;
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 interface IProductNftFactory {
     

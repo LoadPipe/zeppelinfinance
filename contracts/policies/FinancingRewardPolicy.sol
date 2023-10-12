@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
 import "../interfaces/INftPolicy.sol";
@@ -22,6 +22,7 @@ import "../utils/CarefulMath.sol";
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 contract FinancingRewardPolicy is INftPolicy { 
     uint256 public inventoryLimit;

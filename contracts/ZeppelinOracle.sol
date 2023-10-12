@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
 //import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol"; 
@@ -15,6 +15,7 @@ import "./interfaces/IZeppelinOracle.sol";
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 //TODO: (DESIGN) make upgradeable 
 contract ZeppelinOracle is

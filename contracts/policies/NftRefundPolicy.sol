@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
 import "../interfaces/INftPolicy.sol"; 
@@ -15,6 +15,7 @@ import "../ManagedSecurity.sol";
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 contract NftRefundPolicy is INftPolicy, ManagedSecurity { 
     mapping(address => mapping(uint256 => uint256)) tokenPrices;

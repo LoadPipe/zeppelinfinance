@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
 /**
@@ -9,6 +9,7 @@ pragma solidity ^0.8.7;
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 library CarefulMath {
     // Emitted when the ending result in `mulDiv` would overflow uint256.
@@ -17,7 +18,7 @@ library CarefulMath {
     /**
      * Calculates floor(x*y÷denominator) with full precision.
      * 
-     * @dev Credits to Remco Bloemen under MIT license https://xn--2-umb.com/21/muldiv.
+     * @dev Credits to Remco Bloemen under // SPDX-License-Identifier: UNLICENSED license https://xn--2-umb.com/21/muldiv.
      * 
      * Requirements:
      *  - The denominator cannot be zero.

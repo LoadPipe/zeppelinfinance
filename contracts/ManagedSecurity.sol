@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/utils/Context.sol"; 
@@ -14,6 +14,7 @@ import "./interfaces/ISecurityManager.sol";
  * 
  * @author John R. Kosinski
  * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 abstract contract ManagedSecurity is Context { 
     ISecurityManager public securityManager; 
