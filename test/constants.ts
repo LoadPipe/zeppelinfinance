@@ -45,4 +45,5 @@ export const errorMessages = {
     NOT_NFT_OWNER: (callerAddr: string, nftAddr: string) => "CallerNotNftOwner",
     NFT_INSTANCE_UNAVAILABLE: (nftAddr: string, tokenId: number) => "NftInstanceUnavailable",
     INSUFFICIENT_PAYMENT: (expected: number, actual: number) => "InsufficientPayment",
+    INVALID_ACTION: "InvalidAction",
 }

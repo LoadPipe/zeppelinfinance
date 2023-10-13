@@ -17,7 +17,7 @@ import { ethers } from "hardhat";
 import * as constants from "../constants";
 
 
-describe("Policies: SalesPercentage", function () {
+describe("Policies: Affiliate", function () {
     let securityManager: SecurityManager;
     let affiliatePolicy: AffiliateRewardPolicy;
     let nftStore: ProductNftStore;
