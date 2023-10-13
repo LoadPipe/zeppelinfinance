@@ -5,7 +5,10 @@ import {
     ContractSizer, 
     ProductNft, 
     ProductNftFactory,
-    ProductNftIssuer
+    ProductNftIssuer, 
+    ProductNftStore, 
+    ZeppelinOracle, 
+    AffiliatePayout
 } from "typechain";
 import { Addressable } from "ethers";
 
@@ -175,6 +178,18 @@ export async function deployAffiliateRewardPolicy(
     ));
 
     return await factory.deploy(percentageBps);
+}
+
+export async function deployNftRefundPolicy(
+    securityMgrAddr: string | Addressable
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "NftRefundPolicy",
+        accounts[0]
+    ));
+
+    return await factory.deploy(securityMgrAddr);
 }
 
 

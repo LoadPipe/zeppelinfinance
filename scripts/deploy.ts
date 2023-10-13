@@ -6,9 +6,12 @@ import {
     deployProductNftIssuer,
     deployProductNftStore,
     deployWhitelist,
+    deployNftRefundPolicy,
     deployProductNftFactory,
     deployZeppelinOracle,
     deployAffiliatePayout,
+    deployAffiliateRewardPolicy,
+    deployFinancingRewardPolicy,
 } from "./lib/deployment";
 import { run } from "./lib/runner";
 import { getSecurityManagerContract, sleep } from "./utils";
@@ -70,8 +73,32 @@ async function deploy6() {
     return affiliatePayout;
 }
 
-run(async (provider: HardhatEthersProvider, owner: HardhatEthersSigner) => {
+async function deploy7() {
+    const refundPolicy = await deployNftRefundPolicy(addresses.securityManager);
+    console.log("refund policy:", refundPolicy.target);
+    addresses.refundPolicy = refundPolicy.target.toString();
+    await sleep(DELAY);
+    return refundPolicy;
+}
 
+async function deploy8() {
+    const rewardPolicy = await deployAffiliateRewardPolicy(100);
+    console.log("affiliate reward policy:", rewardPolicy.target);
+    addresses.affiliatePolicy = rewardPolicy.target.toString();
+    await sleep(DELAY);
+    return rewardPolicy;
+}
+
+async function deploy9() {
+    const rewardPolicy = await deployFinancingRewardPolicy(100);
+    console.log("financing reward policy:", rewardPolicy.target);
+    addresses.financingPolicy = rewardPolicy.target.toString();
+    await sleep(DELAY);
+    return rewardPolicy;
+}
+
+run(async (provider: HardhatEthersProvider, owner: HardhatEthersSigner) => {
+    /*
     //deploy security manager 
     console.log(owner.address);
     console.log();
@@ -101,6 +128,16 @@ run(async (provider: HardhatEthersProvider, owner: HardhatEthersSigner) => {
 
     //deploy affiliate payment 
     await deploy6();
+
+    //deploy refund policy
+    await deploy7();
+
+    //deploy affiliate reward policy 
+    await deploy8();
+
+    //deploy financing reward policy
+    await deploy9();
+    */
 
     console.log(addresses);
 }); 
