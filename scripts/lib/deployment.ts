@@ -197,7 +197,8 @@ export async function deployNftRefundPolicy(
 }
 
 export async function deployNftPolicyFactory(
-    securityMgrAddr: string | Addressable
+    securityMgrAddr: string | Addressable, 
+    supportsTableland: boolean = false
 ) {
     const accounts = await ethers.getSigners();
     const factory: any = (await ethers.getContractFactory(
@@ -205,7 +206,7 @@ export async function deployNftPolicyFactory(
         accounts[0]
     ));
 
-    return await factory.deploy(securityMgrAddr) as NftPolicyFactory;
+    return await factory.deploy(securityMgrAddr, supportsTableland) as NftPolicyFactory;
 }
 
 

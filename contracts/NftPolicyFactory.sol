@@ -5,6 +5,9 @@ import "./interfaces/INftPolicy.sol";
 import "./policies/AffiliateRewardPolicy.sol";
 import "./policies/FinancingRewardPolicy.sol";
 import "./ManagedSecurity.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@tableland/evm/contracts/utils/TablelandDeployments.sol";
+import "@tableland/evm/contracts/utils/SQLHelpers.sol";
 
 /**
  * @title NftPolicyFactory 
@@ -17,6 +20,10 @@ import "./ManagedSecurity.sol";
  */
 //TODO: (DESIGN) make upgradeable 
 contract NftPolicyFactory is ManagedSecurity {
+    bool public supportsTableland = false; 
+    uint256 private policiesTableId;
+    
+    string private constant POLICIES_TABLE_PREFIX = "policies";
     
     //events 
     event PolicyCreated(
@@ -42,11 +49,14 @@ contract NftPolicyFactory is ManagedSecurity {
      * - 'Address: low-level delegate call failed' (if `securityManager` is not legit)
      * 
      * @param securityManager Contract which will manage secure access for this contract. 
+     * @param _supportsTableland True if tableland is supported on the chain.
      */
     constructor(
-        ISecurityManager securityManager
+        ISecurityManager securityManager, 
+        bool _supportsTableland
     ) {
         _setSecurityManager(securityManager);
+        supportsTableland = _supportsTableland;
     }
     
     /**
@@ -69,6 +79,10 @@ contract NftPolicyFactory is ManagedSecurity {
         
         //emit event & return
         emit PolicyCreated(_msgSender(), address(policy));
+        
+        //write to table if supported 
+        _writeToTable(SQLHelpers.quote(Strings.toHexString(_msgSender())), percentageBps, 0, false, false);
+        
         return policy;
     }
     
@@ -101,5 +115,42 @@ contract NftPolicyFactory is ManagedSecurity {
         //emit event & return
         emit PolicyCreated(_msgSender(), address(policy));
         return policy;
+    }
+    
+    function _writeToTable(
+        string memory sender, 
+        uint16 percentageBps, 
+        uint256 inventoryLimit, 
+        bool shared, 
+        bool fillOrKill
+    ) internal {
+        uint256 nShared = 0;
+        uint256 nFOK = 0; 
+        
+        if (shared) nShared = 1;
+        if (fillOrKill) nFOK = 1;
+        
+        if (supportsTableland) {
+            TablelandDeployments.get().mutate(
+                address(this),
+                policiesTableId,
+                SQLHelpers.toInsert(
+                    POLICIES_TABLE_PREFIX,
+                    policiesTableId,
+                    "id,val",
+                    string.concat(
+                        sender,
+                        ",",
+                        Strings.toString(percentageBps),
+                        ",",
+                        Strings.toString(inventoryLimit),
+                        ",",
+                        Strings.toString(nShared),
+                        ",",
+                        Strings.toString(nFOK)
+                    )
+                )
+            ); 
+        }
     }
 }
