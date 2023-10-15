@@ -8,6 +8,7 @@ import {
     deployProductNftStore,
     deployZeppelinOracle,
     deployAffiliatePayout,
+    deployNftPolicyFactory,
     deployContractSizer,
     getTestAddresses
 } from "./utils";
@@ -21,6 +22,7 @@ import {
     ProductNftIssuer,
     ProductNftStore,
     ZeppelinOracle,
+    NftPolicyFactory,
     AffiliatePayout
 } from "typechain";
 
@@ -33,6 +35,7 @@ describe("Contract Sizes", function () {
     let productNftIssuer: ProductNftIssuer;
     let productNftStore: ProductNftStore;
     let affiliatePayout: AffiliatePayout;
+    let nftPolicyFactory: NftPolicyFactory;
     let zeppelin: ZeppelinOracle;
 
     this.beforeEach(async function () {
@@ -51,19 +54,21 @@ describe("Contract Sizes", function () {
         productNftIssuer = await deployProductNftIssuer(
             securityManager.target.toString(), productNftFactory.target.toString(), productNftStore.target.toString()
         );
+        nftPolicyFactory = await deployNftPolicyFactory(securityManager.target);
     });
 
     describe("Read Contract Sizes", function () {
         it("contract sizes", async function () {
             const contractNames = [
                 "ProductNft",
-                "Whitelist",
-                "SecurityManager",
                 "ProductNftFactory",
                 "ProductNftStore",
-                "ProductNftIssuer",
                 "AffiliatePayout",
-                "ZeppelinOracle"
+                "ProductNftIssuer",
+                "ZeppelinOracle",
+                "NftPolicyFactory",
+                "Whitelist",
+                "SecurityManager"
             ];
             const contractSizes = await Promise.all([
                 contractSizer.getContractSize(productNft.target.toString()),
@@ -72,6 +77,7 @@ describe("Contract Sizes", function () {
                 contractSizer.getContractSize(productNftIssuer.target.toString()),
                 contractSizer.getContractSize(affiliatePayout.target.toString()),
                 contractSizer.getContractSize(zeppelin.target.toString()),
+                contractSizer.getContractSize(nftPolicyFactory.target.toString()),
                 contractSizer.getContractSize(whitelist.target.toString()),
                 contractSizer.getContractSize(securityManager.target.toString())
             ]);
