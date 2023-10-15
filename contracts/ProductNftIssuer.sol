@@ -199,15 +199,14 @@ contract ProductNftIssuer is ManagedSecurity {
         //get the NFT 
         IProductNft nft = IProductNft(nftAddress); 
         string[] memory affiliateIds;
-        //uint256 fieldValueIndex = 0;
+        uint256 fieldValueIndex = 0;
         
         for (uint256 n=0; n<quantity; n++) {
             //mint to the NFT owner
             lastTokenId = nft.mint(nft.owner(), 1, affiliateIds);
             
             for (uint256 i=0; i<fieldNames.length; i++) {
-                //TODO: (HIGH) stack too deep? 
-                //nft.setInstanceField(lastTokenId, fieldNames[i], fieldValues[fieldValueIndex++]); 
+                nft.setInstanceField(lastTokenId, fieldNames[i], fieldValues[fieldValueIndex++]); 
             }
             
             emit NftMinted(_msgSender(), address(nft), lastTokenId);

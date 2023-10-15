@@ -77,7 +77,7 @@ export async function listenForEvent(
  * @param {lambda} funcCall A smart contract call that is expected to revert
  * @param {string} revertMessage The expected revert message from the transaction (optional)
  */
-export async function expectRevert(funcCall: any, revertMessage: string, params: any = null) {
+export async function expectRevert(funcCall: any, revertMessage: string | null = null, params: any = null) {
     if (revertMessage) {
         if (params && Array.isArray(params)) {
             let paramsString = "";

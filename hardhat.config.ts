@@ -91,11 +91,13 @@ module.exports = {
         },
     },
     solidity: {
+        version: "0.8.16",
         settings: {
             optimizer: {
                 enabled: true,
                 runs: 5000
             },
+            viaIR: true,
         },
         compilers: [
             {

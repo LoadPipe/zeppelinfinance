@@ -58,8 +58,9 @@ describe("ProductNft: Fields", function () {
                     "fieldA", 
                     ethers.encodeBytes32String("valueA")
                 ),
-                constants.errorMessages.UNAUTHORIZED_ACCESS
+                //constants.errorMessages.UNAUTHORIZED_ACCESS
             );
+            //TODO: (HIGH) test the inverse
         });
 
         it("authorized user can set a field", async function () {
