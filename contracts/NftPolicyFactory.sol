@@ -6,6 +6,7 @@ import "./policies/AffiliateRewardPolicy.sol";
 import "./policies/FinancingRewardPolicy.sol";
 import "./ManagedSecurity.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@tableland/evm/contracts/utils/TablelandDeployments.sol";
 import "@tableland/evm/contracts/utils/SQLHelpers.sol";
 
@@ -19,9 +20,9 @@ import "@tableland/evm/contracts/utils/SQLHelpers.sol";
  * All rights reserved. Unauthorized use prohibited.
  */
 //TODO: (DESIGN) make upgradeable 
-contract NftPolicyFactory is ManagedSecurity {
+contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
     bool public supportsTableland = false; 
-    uint256 private policiesTableId;
+    uint256 private policiesTableId = 0;
     
     string private constant POLICIES_TABLE_PREFIX = "policies";
     
@@ -57,6 +58,11 @@ contract NftPolicyFactory is ManagedSecurity {
     ) {
         _setSecurityManager(securityManager);
         supportsTableland = _supportsTableland;
+        
+        //create the table 
+        if (supportsTableland) {
+            _createTable();
+        }
     }
     
     /**
@@ -81,7 +87,14 @@ contract NftPolicyFactory is ManagedSecurity {
         emit PolicyCreated(_msgSender(), address(policy));
         
         //write to table if supported 
-        _writeToTable(SQLHelpers.quote(Strings.toHexString(_msgSender())), percentageBps, 0, false, false);
+        _writeToTable(
+            SQLHelpers.quote(Strings.toHexString(_msgSender())), 
+            SQLHelpers.quote("affiliateReward"),
+            percentageBps, 
+            0, 
+            false, 
+            false
+        );
         
         return policy;
     }
@@ -114,11 +127,23 @@ contract NftPolicyFactory is ManagedSecurity {
         
         //emit event & return
         emit PolicyCreated(_msgSender(), address(policy));
+        
+        //write to table if supported 
+        _writeToTable(
+            SQLHelpers.quote(Strings.toHexString(_msgSender())), 
+            SQLHelpers.quote("financingReward"),
+            percentageBps, 
+            inventoryLimit, 
+            shared, 
+            fillOrKill
+        );
+        
         return policy;
     }
     
     function _writeToTable(
         string memory sender, 
+        string memory policyType,
         uint16 percentageBps, 
         uint256 inventoryLimit, 
         bool shared, 
@@ -131,15 +156,18 @@ contract NftPolicyFactory is ManagedSecurity {
         if (fillOrKill) nFOK = 1;
         
         if (supportsTableland) {
+            
             TablelandDeployments.get().mutate(
                 address(this),
                 policiesTableId,
                 SQLHelpers.toInsert(
                     POLICIES_TABLE_PREFIX,
                     policiesTableId,
-                    "id,val",
+                    "sender,policyType,percentageBps,inventoryLimit,shared,fillOrKill",
                     string.concat(
                         sender,
+                        ",",
+                        policyType, 
                         ",",
                         Strings.toString(percentageBps),
                         ",",
@@ -152,5 +180,20 @@ contract NftPolicyFactory is ManagedSecurity {
                 )
             ); 
         }
+    }
+    
+    function _createTable() internal {
+        policiesTableId = TablelandDeployments.get().create(
+            msg.sender,
+            SQLHelpers.toCreateFromSchema(
+                "creator text not null," // Notice the trailing comma
+                "policyType text not null,"
+                "percentageBps integer,"
+                "inventoryLimit integer,"
+                "shared integer,"
+                "fillOrKill integer",
+                POLICIES_TABLE_PREFIX
+            )
+        );
     }
 }
