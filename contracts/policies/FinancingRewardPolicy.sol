@@ -39,7 +39,7 @@ contract FinancingRewardPolicy is INftPolicy {
      * @param _percentageBps Percentage rewarded to holder (in bps)
      * @param _inventoryLimit 0 if unlimited 
      * @param _shared True if rewards are shared among all holders
-     * @param _fillOrKill Iff true, then no rewards are owed unless all instances are sold
+     * @param _fillOrKill If true, then no rewards are owed unless all instances are sold
      */
     constructor( 
         uint16 _percentageBps,

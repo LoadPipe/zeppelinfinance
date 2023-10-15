@@ -8,7 +8,11 @@ import {
     ProductNftIssuer, 
     ProductNftStore, 
     ZeppelinOracle, 
-    AffiliatePayout
+    AffiliatePayout,
+    NftPolicyFactory,
+    FinancingRewardPolicy,
+    AffiliateRewardPolicy,
+    NftRefundPolicy
 } from "typechain";
 import { Addressable } from "ethers";
 
@@ -165,7 +169,7 @@ export async function deployFinancingRewardPolicy(
         accounts[0]
     ));
 
-    return await factory.deploy(percentageBps, inventoryLimit, shared, fillOrKill);
+    return await factory.deploy(percentageBps, inventoryLimit, shared, fillOrKill) as FinancingRewardPolicy;
 }
 
 export async function deployAffiliateRewardPolicy(
@@ -177,7 +181,7 @@ export async function deployAffiliateRewardPolicy(
         accounts[0]
     ));
 
-    return await factory.deploy(percentageBps);
+    return await factory.deploy(percentageBps) as AffiliateRewardPolicy;
 }
 
 export async function deployNftRefundPolicy(
@@ -189,7 +193,19 @@ export async function deployNftRefundPolicy(
         accounts[0]
     ));
 
-    return await factory.deploy(securityMgrAddr);
+    return await factory.deploy(securityMgrAddr) as NftRefundPolicy;
+}
+
+export async function deployNftPolicyFactory(
+    securityMgrAddr: string | Addressable
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "NftPolicyFactory",
+        accounts[0]
+    ));
+
+    return await factory.deploy(securityMgrAddr) as NftPolicyFactory;
 }
 
 

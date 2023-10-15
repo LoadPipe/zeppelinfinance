@@ -150,5 +150,6 @@ export {
     deployAffiliatePayout,
     deployFinancingRewardPolicy,
     deployAffiliateRewardPolicy,
+    deployNftPolicyFactory,
     deployContractSizer
 } from "../../scripts/lib/deployment"; 
