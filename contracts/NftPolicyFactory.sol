@@ -22,7 +22,7 @@ import "@tableland/evm/contracts/utils/SQLHelpers.sol";
 //TODO: (DESIGN) make upgradeable 
 contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
     bool public supportsTableland = false; 
-    uint256 private policiesTableId = 0;
+    uint256 public policiesTableId = 0;
     
     string private constant POLICIES_TABLE_PREFIX = "policies";
     
@@ -58,11 +58,6 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
     ) {
         _setSecurityManager(securityManager);
         supportsTableland = _supportsTableland;
-        
-        //create the table 
-        if (supportsTableland) {
-            _createTable();
-        }
     }
     
     /**
@@ -88,8 +83,7 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
         
         //write to table if supported 
         _writeToTable(
-            SQLHelpers.quote(Strings.toHexString(_msgSender())), 
-            SQLHelpers.quote("affiliateReward"),
+            2,
             percentageBps, 
             0, 
             false, 
@@ -130,8 +124,7 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
         
         //write to table if supported 
         _writeToTable(
-            SQLHelpers.quote(Strings.toHexString(_msgSender())), 
-            SQLHelpers.quote("financingReward"),
+            1,
             percentageBps, 
             inventoryLimit, 
             shared, 
@@ -141,21 +134,39 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
         return policy;
     }
     
+    function initializeTable() public onlyRole(SYSTEM_ROLE) {
+        if (supportsTableland) {
+            policiesTableId = TablelandDeployments.get().create(
+                address(this),
+                SQLHelpers.toCreateFromSchema(
+                    "id integer primary key,"
+                    "policyType integer not null,"
+                    "percentageBps integer,"
+                    "inventoryLimit integer,"
+                    "shared integer,"
+                    "fillOrKill integer",
+                    POLICIES_TABLE_PREFIX
+                )
+            );
+        }
+    }
+    
     function _writeToTable(
-        string memory sender, 
-        string memory policyType,
+        uint8 policyType,
         uint16 percentageBps, 
         uint256 inventoryLimit, 
         bool shared, 
         bool fillOrKill
     ) internal {
-        uint256 nShared = 0;
-        uint256 nFOK = 0; 
+        string memory sShared = "0";
+        string memory sFillOrKill = "0"; 
         
-        if (shared) nShared = 1;
-        if (fillOrKill) nFOK = 1;
+        if (shared) sShared = "1";
+        if (fillOrKill) sFillOrKill = "1";
         
         if (supportsTableland) {
+            
+            uint256 primaryKeyId = uint256(keccak256(abi.encodePacked(policyType, percentageBps, inventoryLimit, shared, fillOrKill))); 
             
             TablelandDeployments.get().mutate(
                 address(this),
@@ -163,37 +174,22 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
                 SQLHelpers.toInsert(
                     POLICIES_TABLE_PREFIX,
                     policiesTableId,
-                    "sender,policyType,percentageBps,inventoryLimit,shared,fillOrKill",
+                    "id,policyType,percentageBps,inventoryLimit,shared,fillOrKill",
                     string.concat(
-                        sender,
+                        Strings.toString(primaryKeyId),
                         ",",
-                        policyType, 
+                        Strings.toString(policyType), 
                         ",",
                         Strings.toString(percentageBps),
                         ",",
                         Strings.toString(inventoryLimit),
                         ",",
-                        Strings.toString(nShared),
+                        sShared,
                         ",",
-                        Strings.toString(nFOK)
+                        sFillOrKill
                     )
                 )
             ); 
         }
-    }
-    
-    function _createTable() internal {
-        policiesTableId = TablelandDeployments.get().create(
-            msg.sender,
-            SQLHelpers.toCreateFromSchema(
-                "creator text not null," // Notice the trailing comma
-                "policyType text not null,"
-                "percentageBps integer,"
-                "inventoryLimit integer,"
-                "shared integer,"
-                "fillOrKill integer",
-                POLICIES_TABLE_PREFIX
-            )
-        );
     }
 }
