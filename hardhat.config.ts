@@ -16,6 +16,7 @@ import "./tasks/balance";
 import "./tasks/block-number";
 import "./tasks/create-collectibles";
 
+
 const MAINNET_RPC_URL =
     process.env.MAINNET_RPC_URL ||
     process.env.ALCHEMY_MAINNET_RPC_URL ||
@@ -28,19 +29,28 @@ const ETHERSCAN_API_KEY =
 
 module.exports = {
     defaultNetwork: "hardhat",
+    localTableland: {
+        silent: false,
+        verbose: false,
+    },
     networks: {
         hardhat: {
             // // If you want to do some forking, uncomment this
             // forking: {
             //   url: MAINNET_RPC_URL
             // }
-        }, 
+        },
+        matic_mumbai: {
+            accounts: [`${process.env.PRIVATE_KEY}`],
+            chainId: 80001,
+            url: `https://polygon-mumbai-bor.publicnode.com`,
+        },
         goerli: {
             accounts: [`${process.env.PRIVATE_KEY}`],
             chainId: 5,
             url: `https://eth-goerli.g.alchemy.com/v2/${process.env.GOERLI_API_KEY}`,
         },
-        opgoerli: {
+        optimism_goerli: {
             accounts: [`${process.env.PRIVATE_KEY}`],
             chainId: 420,
             url: `https://goerli.optimism.io`,
@@ -50,7 +60,7 @@ module.exports = {
             chainId: 11155111,
             url: `https://sepolia.infura.io/v3/${process.env.SEPOLIA_API_KEY}`,
         },
-        opsepolia: {
+        optimism_sepolia: {
             accounts: [`${process.env.PRIVATE_KEY}`],
             chainId: 11155420,
             url: `https://sepolia.optimism.io`,
@@ -65,6 +75,11 @@ module.exports = {
             chainId: 1442,
             url: `https://rpc.public.zkevm-test.net`
         },
+        scroll_sepolia: {
+            accounts: [`${process.env.PRIVATE_KEY}`],
+            chainId: 534351,
+            url: `https://sepolia-rpc.scroll.io/`,
+        },
         mantle_testnet: {
             accounts: [`${process.env.PRIVATE_KEY}`],
             chainId: 5001,
@@ -74,7 +89,7 @@ module.exports = {
             accounts: [`${process.env.PRIVATE_KEY}`],
             chainId: 314159,
             url: `https://filecoin-calibration.chainup.net/rpc/v1`
-        }
+        }, 
     },
     etherscan: {
         // Your API key for Etherscan
