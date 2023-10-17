@@ -139,7 +139,7 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
             policiesTableId = TablelandDeployments.get().create(
                 address(this),
                 SQLHelpers.toCreateFromSchema(
-                    "id integer primary key,"
+                    "id text primary key not null unique,"
                     "policyType integer not null,"
                     "percentageBps integer,"
                     "inventoryLimit integer,"
@@ -157,7 +157,7 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
         uint256 inventoryLimit, 
         bool shared, 
         bool fillOrKill
-    ) internal {
+    ) public payable {
         string memory sShared = "0";
         string memory sFillOrKill = "0"; 
         
@@ -176,7 +176,7 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
                     policiesTableId,
                     "id,policyType,percentageBps,inventoryLimit,shared,fillOrKill",
                     string.concat(
-                        Strings.toString(primaryKeyId),
+                        SQLHelpers.quote(Strings.toString(primaryKeyId)),
                         ",",
                         Strings.toString(policyType), 
                         ",",
