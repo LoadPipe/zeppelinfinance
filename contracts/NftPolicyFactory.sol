@@ -23,8 +23,7 @@ import "@tableland/evm/contracts/utils/SQLHelpers.sol";
 contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
     bool public supportsTableland = false; 
     uint256 public policiesTableId = 0;
-    
-    string private constant POLICIES_TABLE_PREFIX = "policies";
+    string public policiesTablePrefix = ""; 
     
     //events 
     event PolicyCreated(
@@ -51,13 +50,19 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
      * 
      * @param securityManager Contract which will manage secure access for this contract. 
      * @param _supportsTableland True if tableland is supported on the chain.
+     * @param _policiesTableId Numeric unique ID of the tableland table.
+     * @param _policiesTablePrefix String prefix of the tableland table.
      */
     constructor(
         ISecurityManager securityManager, 
-        bool _supportsTableland
+        bool _supportsTableland, 
+        string memory _policiesTablePrefix, 
+        uint256 _policiesTableId
     ) {
         _setSecurityManager(securityManager);
         supportsTableland = _supportsTableland;
+        policiesTableId = _policiesTableId; 
+        policiesTablePrefix = _policiesTablePrefix; 
     }
     
     /**
@@ -134,21 +139,22 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
         return policy;
     }
     
-    function initializeTable() public onlyRole(SYSTEM_ROLE) {
-        if (supportsTableland) {
-            policiesTableId = TablelandDeployments.get().create(
-                address(this),
-                SQLHelpers.toCreateFromSchema(
-                    "id text primary key not null unique,"
-                    "policyType integer not null,"
-                    "percentageBps integer,"
-                    "inventoryLimit integer,"
-                    "shared integer,"
-                    "fillOrKill integer",
-                    POLICIES_TABLE_PREFIX
-                )
-            );
-        }
+    /**
+     * Sets the table info for use of tableland tables, which are used for policy creation 
+     * records. Example use case: a new table has been deployed and transferred. 
+     * 
+     * @param _supportsTableland True if tableland is supported on the chain.
+     * @param _policiesTablePrefix String prefix of the tableland table.
+     * @param _policiesTableId Numeric unique ID of the tableland table.
+     */
+    function setTablelandInfo(
+        bool _supportsTableland, 
+        string calldata _policiesTablePrefix, 
+        uint256 _policiesTableId
+    ) public onlyRole(ADMIN_ROLE) {
+        supportsTableland = _supportsTableland;
+        policiesTablePrefix = _policiesTablePrefix;
+        policiesTableId = _policiesTableId;
     }
     
     function _writeToTable(
@@ -157,14 +163,14 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
         uint256 inventoryLimit, 
         bool shared, 
         bool fillOrKill
-    ) public payable {
-        string memory sShared = "0";
-        string memory sFillOrKill = "0"; 
-        
-        if (shared) sShared = "1";
-        if (fillOrKill) sFillOrKill = "1";
-        
+    ) public {
         if (supportsTableland) {
+            string memory sShared = "0";
+            string memory sFillOrKill = "0"; 
+            
+            if (shared) sShared = "1";
+            if (fillOrKill) sFillOrKill = "1";
+        
             
             uint256 primaryKeyId = uint256(keccak256(abi.encodePacked(policyType, percentageBps, inventoryLimit, shared, fillOrKill))); 
             
@@ -172,7 +178,7 @@ contract NftPolicyFactory is ManagedSecurity, ERC721Holder {
                 address(this),
                 policiesTableId,
                 SQLHelpers.toInsert(
-                    POLICIES_TABLE_PREFIX,
+                    policiesTablePrefix,
                     policiesTableId,
                     "id,policyType,percentageBps,inventoryLimit,shared,fillOrKill",
                     string.concat(

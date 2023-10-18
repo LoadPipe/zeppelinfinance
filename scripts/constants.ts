@@ -28,18 +28,18 @@ export const addresses: any = {
         affiliatePolicy: '0xCA5B040866eAf7aae577A05C664d702Df9a3C76d',
         policyFactory: '0x7B362B300fb343a2DCc565580C65724bF156ac7F'
     },
-    zkevm: {
+    zkevm_testnet: {
         zeroAddress: "0x0000000000000000000000000000000000000000",
-        securityManager: "0xe21656269BB86877c6F90B287b7bb26EF9127640",
-        nftFactory: "0xA417775D7bCC5eA03D8F1223D25C3B47CB22C2bE",
-        nftStore: '0xd7e19b955321dcaE4070cF9240c2aD33C7439457',
-        nftIssuer: '0x30EE26f15D25ceF2dfAb4e6381b4077bcE080771',
-        zeppelin: '0xf284B55F46B9A0Fe7d79ce92F869Ac52b9B3Ff7c',
-        affiliatePayout: '0x729895AaC3b1a776DcAd98c4d666e665d71a6E9F',
-        refundPolicy: '0x2209E03169D69F45bbADcbE230BBb3842F6c6c6E',
-        financingPolicy: '0xd86FFB404147163e19E010a0e9d4995E0e36F335',
-        affiliatePolicy: '0x2353640E45274cFdcbE550Bcb7bb2B9c382f7ab1',
-        policyFactory: '0xD48425B7fb702F571D872f4b7046B30c9FA47e15'
+        securityManager: "0x4B36e6130b4931DCc5A64c4bca366790aAA068d1",
+        nftFactory: "0x45B24160Da2cA92673B6CAf4dFD11f60aDac73E3",
+        nftStore: '0xa5fd28B5E691685EBcfa6006b2e8c1b09B27ddC1',
+        nftIssuer: '0xE145471C075b5E57e85BcD909E9004fDD59557f5',
+        zeppelin: '0x5cB603DB37d80e162a355f8085ED1885769ec211',
+        affiliatePayout: '0xb799Df50f2d81cAEd17b130357c3796012D4cFAC',
+        refundPolicy: '0x58d3E4e41dbc7Dde9783595B0D690dc53EDAc1A7',
+        financingPolicy: '0x5a005981378ADfC1F1D984c7B623E5eBB7E1D334',
+        affiliatePolicy: '0xA9E165a9D67c6E6C341d07B6CC47Dd6810197A8C',
+        policyFactory: '0x129086dCB12a4D03944084330c84941F17Abb08F'
     },
     optimism_goerli: {
         zeroAddress: "0x0000000000000000000000000000000000000000",
@@ -65,6 +65,6 @@ export const addresses: any = {
         refundPolicy: '0xa5fd28B5E691685EBcfa6006b2e8c1b09B27ddC1',
         financingPolicy: '0xE145471C075b5E57e85BcD909E9004fDD59557f5',
         affiliatePolicy: '0x412d0493c7fF6FFba527f2A8bcc21Fa419ea809C',
-        policyFactory: '0x129086dCB12a4D03944084330c84941F17Abb08F'
+        policyFactory: '0xc9a56c48b9f85a5D7A6752bc753bE3E5f1FCCcB7'
     }
 }   
