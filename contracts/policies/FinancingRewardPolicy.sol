@@ -5,6 +5,7 @@ import "../interfaces/INftPolicy.sol";
 import "../interfaces/IZeppelinOracle.sol"; 
 import "../interfaces/IProductNft.sol"; 
 import "../utils/CarefulMath.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 /**
  * @title FinancingRewardPolicy 
@@ -117,6 +118,26 @@ contract FinancingRewardPolicy is INftPolicy {
         }
         
         return owed;
+    }
+    
+    /**
+     * Returns a string (JSON) representation of the essential policy properties; this is 
+     * for client-side use. 
+     * See {INftPolicy-getPolicyInfoJson}
+     */
+    function getPolicyInfoJson() external view returns (string memory) {
+        return string.concat(
+            "{\"policyType\":\"FinancingRewardPolicy\"", 
+            ", \"percentageBps\":",
+            Strings.toString(percentageBps), 
+            ", \"inventoryLimit\":",
+            Strings.toString(inventoryLimit),
+            ", \"fillOrKill\":",
+            shared ? "true" : "false",
+            ", \"shared\":",
+            fillOrKill ? "true" : "false",
+            "}"
+        );
     }
 }
 

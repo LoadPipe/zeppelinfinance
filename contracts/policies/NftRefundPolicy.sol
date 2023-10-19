@@ -61,5 +61,14 @@ contract NftRefundPolicy is INftPolicy, ManagedSecurity {
      * @return False unconditionally.
      */
     function isFillOrKill() external pure returns (bool) { return false; } 
+    
+    /**
+     * Returns a string (JSON) representation of the essential policy properties; this is 
+     * for client-side use. 
+     * See {INftPolicy-getPolicyInfoJson}
+     */
+    function getPolicyInfoJson() external pure returns (string memory) {
+        return  "{ \"policyType\":\"NftRefundPolicy\"}";
+    }
 }
 

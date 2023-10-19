@@ -36,4 +36,15 @@ interface INftPolicy {
      * Returns true if this policy represents a fill-or-kill NFT reward policy.
      */
     function isFillOrKill() external view returns (bool); 
+    
+    /**
+     * Returns a string (JSON) representation of the essential policy properties; this is 
+     * for client-side use. 
+     * Example: 
+     * { "policyType": "FinancingRewardPolicy", "field1": "value1", ... }
+     * 
+     * The only required field is "policyType", and it should be equal to the name of the 
+     * the contract in which it is defined.
+     */
+    function getPolicyInfoJson() external view returns (string memory); 
 }

@@ -5,6 +5,7 @@ import "../interfaces/INftPolicy.sol";
 import "../interfaces/IZeppelinOracle.sol"; 
 import "../interfaces/IProductNft.sol"; 
 import "../utils/CarefulMath.sol"; 
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 /**
  * @title AffiliateRewardPolicy 
@@ -66,5 +67,19 @@ contract AffiliateRewardPolicy is INftPolicy {
      * @return False unconditionally.
      */
     function isFillOrKill() external pure returns (bool) { return false; } 
+    
+    /**
+     * Returns a string (JSON) representation of the essential policy properties; this is 
+     * for client-side use. 
+     * See {INftPolicy-getPolicyInfoJson}
+     */
+    function getPolicyInfoJson() external view returns (string memory) {
+        return string.concat(
+            "{ \"policyType\":\"AffiliateRewardPolicy\"", 
+            ", \"percentageBps\":",
+            Strings.toString(percentageBps), 
+            "}"
+        );
+    }
 }
 
