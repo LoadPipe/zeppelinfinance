@@ -113,8 +113,6 @@ contract AffiliatePayout is ManagedSecurity, ReentrancyGuard {
         return owed;
     }
     
-    //TODO: (DESIGN) get amount owed per nft per user (owner), rather than per token ID
-    
     /**
      * Empty receive function, for funding the contract. 
      */
