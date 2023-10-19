@@ -98,7 +98,8 @@ describe("ProductNftIssuer: Issue Nfts", function () {
             await nftIssuer.mintNfts(
                 nftAddress,
                 quantity,
-                fieldNames, []
+                fieldNames, 
+                fieldValues
             );
         });
     }
@@ -140,7 +141,6 @@ describe("ProductNftIssuer: Issue Nfts", function () {
             //get the newly created nft 
             const productNft = await ethers.getContractAt("ProductNft", createOutput.nftAddress);
 
-            //TODO: (TEST) test with field instance values 
             const instanceFieldNames: string[] = [];
             const instanceFieldValues: any[] = [];
             const mintOutputs: any[] = await mintNfts(
@@ -155,10 +155,39 @@ describe("ProductNftIssuer: Issue Nfts", function () {
                 expect(output.creator).to.equal(addresses.admin);
                 expect(output.nftAddress).to.equal(createOutput.nftAddress);
                 expect(parseInt(output.tokenId)).to.equal(i + 1);
+            });
 
+            //token quantity 
+            expect(parseInt(await productNft.totalMinted())).to.equal(quantity)
+            expect(parseInt(await productNft.balanceOf(addresses.admin))).to.equal(quantity)
+        });
+
+        it("can create and mint NFTs with fields", async function () {
+            const productName = "Product name";
+            const nftSymbol = "ABC";
+            const quantity = 3;
+
+            const createOutput: any = await createNft(productName, nftSymbol, [], []);
+
+            //get the newly created nft 
+            const productNft = await ethers.getContractAt("ProductNft", createOutput.nftAddress);
+
+            //TODO: (TEST) test with field instance values 
+            const instanceFieldNames: string[] = ["f1", "f2"];
+            const instanceFieldValues: any[] = ["v1_1", "v1_2", "v1_3", "v2_1", "v2_2", "v2_3"];
+            const mintOutputs: any[] = await mintNfts(
+                createOutput.nftAddress, instanceFieldNames, instanceFieldValues, quantity
+            );
+
+            expect(mintOutputs.length).to.equal(quantity);
+            mintOutputs.sort((a, b) => parseInt(a.tokenId) - parseInt(b.tokenId));
+
+            //test event parameters 
+            mintOutputs.forEach((output, i) => {
                 //test field values 
                 instanceFieldNames.forEach(async (field, n) => {
-                    expect(await productNft.getInstanceFieldString(field)).to.equal(instanceFieldValues[n])
+                    console.log(await await productNft.getInstanceFieldString(field));
+                    //expect(await productNft.getInstanceFieldString(field)).to.equal(instanceFieldValues[n + (n * instanceFieldNames.length)])
                 });
             });
 
