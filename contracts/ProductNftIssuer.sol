@@ -127,7 +127,7 @@ contract ProductNftIssuer is ManagedSecurity {
     
     //STEP 2: attach policies 
     /**
-     * Attaches a policy to the specified NFT, if security criteria are met. This operation
+     * Attaches NFT policies to the specified NFT, if security criteria are met. This operation
      * can only be performed before any tokens have been minted for the given NFT.
      * 
      * Reverts: 
@@ -136,12 +136,12 @@ contract ProductNftIssuer is ManagedSecurity {
      * - {SellerNotAuthorized} if the caller is not an authorized seller. 
      * - {UnauthorizedAccess}: if caller is not authorized with the appropriate role
      * 
-     * @param nftAddress The address of an NFT to which to attach the policy.
-     * @param nftPolicy The address of a contract which defines the policy to attach.
+     * @param nftAddress The address of an NFT to which to attach the policies.
+     * @param nftPolicies The addresses of contracts which define the policies to attach.
      */
-    function attachNftPolicy(
+    function attachNftPolicies(
         address nftAddress,
-        INftPolicy nftPolicy
+        INftPolicy[] calldata nftPolicies
     ) external 
         onlyRole(NFT_SELLER_ROLE) 
         onlyNftOwner(nftAddress) 
@@ -149,13 +149,16 @@ contract ProductNftIssuer is ManagedSecurity {
         IProductNft nft = IProductNft(nftAddress); 
         if (nft.totalMinted() > 0) 
             revert InvalidAction(); 
-        
-        //attach the policy 
-        nft.attachPolicy(address(nftPolicy));
-        
-        //if policy is fill-or-kill, attach refund policy 
-        if (nftPolicy.isFillOrKill()) {
-            nft.attachPolicy(address(refundPolicy));
+            
+        for (uint256 n=0; n<nftPolicies.length; n++) {
+            //attach the policy 
+            nft.attachPolicy(address(nftPolicies[n]));
+            
+            //if policy is fill-or-kill, attach refund policy 
+            //TODO: (BUG) will cause error if a refund already attached 
+            if (nftPolicies[n].isFillOrKill()) {
+                nft.attachPolicy(address(refundPolicy));
+            }
         }
     }
     

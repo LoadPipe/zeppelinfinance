@@ -106,10 +106,12 @@ describe("ProductNftIssuer: Issue Nfts", function () {
     describe("Issue NFTs", function () {
 
         it("can create NFTs", async function () {
-            const productName = "Product name";
+            const productName = "Men's Premium Drinking Flask Gift Set";
             const nftSymbol = "ABC";
-            const fieldNames = ["field1", "field2", "field3"];
-            const fieldValues = ["value1", "value2", "value3"];
+            const brandName = "Excalibur Brothers"; 
+            const productUrl = "http://url.image";
+            const fieldNames = ["productName", "brand", "url"];
+            const fieldValues = [productName, brandName, productUrl];
 
             const eventOutput: any = await createNft(productName, nftSymbol, fieldNames, fieldValues);
 
@@ -183,7 +185,7 @@ describe("ProductNftIssuer: Issue Nfts", function () {
             expect(parseInt(await nftStore.getPrice(createOutput.nftAddress))).to.equal(price);
         });
 
-        it("can attach policies to created NFTs", async function () {
+        it("can attach a single policy to created NFTs", async function () {
             const productName = "Product name";
             const nftSymbol = "ABC";
 
@@ -192,9 +194,9 @@ describe("ProductNftIssuer: Issue Nfts", function () {
             //get the newly created nft 
             const productNft = await ethers.getContractAt("ProductNft", createOutput.nftAddress);
 
-            await nftIssuer.attachNftPolicy(
+            await nftIssuer.attachNftPolicies(
                 createOutput.nftAddress,
-                rewardPolicy.target.toString()
+                [rewardPolicy.target.toString()]
             );
 
             const policies = await productNft.getPolicies();
@@ -204,6 +206,8 @@ describe("ProductNftIssuer: Issue Nfts", function () {
             //TODO: (TEST) test the param values 
             //TODO: (TEST) test with a second policy
         });
+        
+        //TODO: (TEST) multiple policies at once
 
         it("cannot attach more than a max number of policies", async function () {
             //TODO: (TEST) cannot attach more than a max number of policies
@@ -242,7 +246,7 @@ describe("ProductNftIssuer: Issue Nfts", function () {
 
             //attach NFT policy 
             await expectRevert(
-                () => nftIssuer.connect(accounts.seller).attachNftPolicy(createOutput.nftAddress, rewardPolicy.target.toString()),
+                () => nftIssuer.connect(accounts.seller).attachNftPolicies(createOutput.nftAddress, [rewardPolicy.target.toString()]),
                 null //constants.errorMessages.NOT_NFT_OWNER(addresses.seller, createOutput.nftAddress)
             );
             //TODO: (HIGH) test the inverse
@@ -259,7 +263,7 @@ describe("ProductNftIssuer: Issue Nfts", function () {
 
             //attach NFT policy 
             await expectRevert(
-                () => nftIssuer.attachNftPolicy(createOutput.nftAddress, rewardPolicy.target.toString()),
+                () => nftIssuer.attachNftPolicies(createOutput.nftAddress, [rewardPolicy.target.toString()]),
                 constants.errorMessages.INVALID_ACTION
             );
         });
