@@ -230,6 +230,7 @@ contract ProductNftIssuer is ManagedSecurity {
      * @param nftAddress The address of the NFT to post for sale.
      * @param price The price at which to sell the NFT. 
      */
+    //TODO: (DESIGN) better to pass the store address 
     function postToStore(
         address nftAddress, 
         uint256 price

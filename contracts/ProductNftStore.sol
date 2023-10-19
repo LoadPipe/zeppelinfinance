@@ -80,8 +80,12 @@ contract ProductNftStore is ManagedSecurity, IProductNftStore, ReentrancyGuard {
         if (price == 0) {
             revert ZeroValueArgument();
         }
+        bool exists = nftsToPrices[nftAddress] > 0; 
         nftsToPrices[nftAddress] = price;
-        nfts.push(nftAddress);
+        
+        if (!exists) {
+            nfts.push(nftAddress);
+        }
     }
     
     /**
