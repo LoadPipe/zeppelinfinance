@@ -3,6 +3,8 @@ import Wallet from "@/Web3/Wallet";
 import { useState, useRef } from "react";
 import Select from "@/Components/Select/Select";
 import Heading from "../Heading/Heading";
+import MessageOverlay from "@/Components/MessageOverlay/MessageOverlay";
+import ProgressOverlay from "@/Components/ProgressOverlay/ProgressOverlay";
 import { ethers } from "ethers";
 
 export const MintNfts = (props: { onMinted: any, nftAddress: string }) => {
@@ -11,11 +13,14 @@ export const MintNfts = (props: { onMinted: any, nftAddress: string }) => {
   }
   const walletRef = useRef<WalletRefType | null>(null);
   const [quantity, setQuantity] = useState(0);
+  const [messageText, setMessageText] = useState("");
+  const [progressVisible, setProgressVisible] = useState(false);
 
   const { onMinted, nftAddress } = props;
 
   const mint = async (quantity: number) => {
     if (walletRef && walletRef.current && quantity > 0) {
+      setProgressVisible(true);
       
       const affiliateIds = [];
       for (let n = 0; n < quantity; n++) {
@@ -27,8 +32,11 @@ export const MintNfts = (props: { onMinted: any, nftAddress: string }) => {
       if (tx) {
         const rc = await tx.wait();
         console.log('Transaction hash:', tx.hash);
+        setMessageText("Transaction hash:: " + tx.hash)
         return true;
       }
+
+      setProgressVisible(false);
     }
   };
 
@@ -66,6 +74,8 @@ export const MintNfts = (props: { onMinted: any, nftAddress: string }) => {
       </div>
 
       <button className="text-center text-orange-500 text-base font-semibold leading-normal px-6 py-3 bg-white rounded-xl border border-slate-300 " onClick={() => handleSubmit()}>Next</button>
+      <MessageOverlay text={messageText}></MessageOverlay>
+      <ProgressOverlay visible={progressVisible}></ProgressOverlay>
     </div>
   );
 }

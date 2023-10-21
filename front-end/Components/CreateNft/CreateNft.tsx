@@ -4,6 +4,8 @@ import UploadFile from "@/Components/UploadFile/UploadFile";
 import Subtitle from "@/Components/Subtitle/Subtitle";
 import Wallet from "@/Web3/Wallet";
 import Heading from "../Heading/Heading";
+import MessageOverlay from "@/Components/MessageOverlay/MessageOverlay";
+import ProgressOverlay from "@/Components/ProgressOverlay/ProgressOverlay";
 import { useState, useRef } from "react";
 
 //TODO: loading screens 
@@ -20,6 +22,8 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
   const [files, setFiles] = useState();
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
+  const [messageText, setMessageText] = useState("");
+  const [progressVisible, setProgressVisible] = useState(false);
 
   const onDropFile = (files: any) => {
     setFiles(files);
@@ -33,6 +37,7 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
     const fieldValues = [brandName, url];
     
     if (walletRef && walletRef.current) {
+      setProgressVisible(true);
       const tx = await walletRef.current.createNft(productName, fieldNames, fieldValues);
       let newNftAddress = null;
 
@@ -40,17 +45,19 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
         console.log(tx);
         const rc = await tx.wait();
         console.log('Transaction hash:', tx.hash);
+        setMessageText("Transaction hash:: " + tx.hash)
 
-        //TODO: logs not available, can't get nft address 
         //get the new NFT's address 
         rc.events.forEach((e: any) => {
           console.log(e);
           if (e.event == "NftCreated") {
             newNftAddress = e.args.nftAddress;
+            setMessageText("new nft: " + e.args.nftAddress)
           }
         });
       }
 
+      setProgressVisible(false);
       return newNftAddress;
     }
   };
@@ -100,6 +107,9 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
       </div>
       
       <button className="text-center text-orange-500 text-base font-semibold leading-normal px-6 py-3 bg-white rounded-xl border border-slate-300 " onClick={() => handleSubmit()}>Next</button>
+
+      <MessageOverlay text={messageText}></MessageOverlay>
+      <ProgressOverlay visible={progressVisible}></ProgressOverlay>
     </div>
   );
 }

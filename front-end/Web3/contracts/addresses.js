@@ -12,15 +12,15 @@ module.exports = {
         policyFactory: '0xBC67c5D89906eE0E0C4A9F4926Ca26690bD4F804'
     },
     "matic_mumbai": {
-        securityManager: "0xe21656269BB86877c6F90B287b7bb26EF9127640",
-        productNftFactory: "0x30EE26f15D25ceF2dfAb4e6381b4077bcE080771",
+        securityManager: '0xe21656269BB86877c6F90B287b7bb26EF9127640',
+        productNftFactory: '0x30EE26f15D25ceF2dfAb4e6381b4077bcE080771',
         productNftStore: '0xADF789E61Bf38c463e4bA5B2B6E9C1Af6659e11b',
         productNftIssuer: '0x39b467042099881B510b35911e7d8FEd9C8F2Be9',
-        zeppelinOracle: '0x4B36e6130b4931DCc5A64c4bca366790aAA068d1',
-        affiliatePayout: '0x45B24160Da2cA92673B6CAf4dFD11f60aDac73E3',
-        refundPolicy: '0xa5fd28B5E691685EBcfa6006b2e8c1b09B27ddC1',
-        financingPolicy: '0xE145471C075b5E57e85BcD909E9004fDD59557f5',
-        affiliatePolicy: '0x412d0493c7fF6FFba527f2A8bcc21Fa419ea809C',
+        zeppelinOracle: '0x4BE5Be7f9dF583225D836601fE00eDA090A546cf',
+        affiliatePayout: '0x1a8a1E3DC468329fd47DEe2B778585FE20De3429',
+        refundPolicy: '0x6C447E11F03F09dF89076A1542Fe807C7f0870Ba',
+        financingPolicy: '0x6Da37Be6E3dC0A88879aF7513F7E00B7E70c7f4C',
+        affiliatePolicy: '0x252d438e056fe4Da436c92389595B97b1C912B27',
         policyFactory: '0xc9a56c48b9f85a5D7A6752bc753bE3E5f1FCCcB7'
     },
     "scroll_sepolia": {

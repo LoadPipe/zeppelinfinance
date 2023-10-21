@@ -17,6 +17,7 @@ import imgCloth from "@/images/cloth.png";
 import imgShotglass from "@/images/shotglass.png";
 import imgPourers from "@/images/pourer.png";
 import imgShelfMat from "@/images/shelfmat.png";
+import imgCondiment from "@/images/condiment.png";
 import placeholderImage from "@/images/imgCollection3.png";
 
 //TODO: get chain dynamically
@@ -63,6 +64,8 @@ export default function Home() {
       return imgShotglass;
     if (nft.productName.toLowerCase().indexOf("shelf mat") >= 0)
       return imgShelfMat;
+    if (nft.productName.toLowerCase().indexOf("condiment") >= 0)
+      return imgCondiment;
 
     return placeholderImage;
   }
@@ -97,7 +100,7 @@ export default function Home() {
       title: nft.productName, 
       price: ethers.utils.formatEther(parseInt(nft.price)).replace("0.00000000000", "0."),
       royalty: getRoyalty(nft), 
-      affiliate: 0, 
+      affiliate: getAffiliate(nft), 
       bonus: "No", 
       payout: 0, 
       amount: `${nft.instances.length}/${nft.totalMinted}`,
