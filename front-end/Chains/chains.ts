@@ -96,10 +96,6 @@ export const scrollSepolia: Chain = {
   faucetUrl: 'https://faucet.quicknode.com/scroll/sepolia'
 }
 
-//TODO: ADD OTHER SUPPORTED CHAINS
-// POLYGON ZK
-// SCROLL
-
 const chains: Chain[] = [sepoliaChain, maticZkevmGoerli, scrollSepolia, mumbaiChain, gnosisChain, goerliChain, mainnetChain, polygonChain]
 
 export const initialChain = mumbaiChain

@@ -26,7 +26,6 @@ export const AttachPolicies = (props: { onPoliciesAttached: any, nftAddress: str
   const attachPolicies = async (policies: string[]) => {
     if (walletRef && walletRef.current && policies.length) {
       const tx = await walletRef.current.attachNftPolicies(nftAddress, policies);
-
       if (tx) {
         const rc = await tx.wait();
         console.log('Transaction hash:', tx.hash);
@@ -39,7 +38,7 @@ export const AttachPolicies = (props: { onPoliciesAttached: any, nftAddress: str
   //TODO: link policies to actual things 
   const handleSubmit = async () => {
     if (checkbox1 || checkbox2 || checkbox3 || checkbox4) {
-      if (await attachPolicies([addresses.affiliatePolicy, addresses.financingPolicy])) {
+      if (await attachPolicies([addresses.affiliatePolicy])) {
         onPoliciesAttached(true);
       }
     }

@@ -8,6 +8,8 @@ import { useState, useRef } from "react";
 
 //TODO: loading screens 
 
+//TODO: show tx id 
+
 //TODO: controls should be invisible if not a seller 
 
 export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {

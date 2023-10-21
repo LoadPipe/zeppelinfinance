@@ -9,6 +9,8 @@ import ethereumIcon from "@/images/Ethereum.svg";
 import twitterIcon from "@/images/twitter.svg";
 import facebookIcon from "@/images/facebook.svg";
 import backgroundImage from "@/images/background-header.jpg";
+import MessageOverlay from "@/Components/MessageOverlay/MessageOverlay";
+import ProgressOverlay from "@/Components/ProgressOverlay/ProgressOverlay";
 
 import CounterSocial from "@/Components/CounterSocial/CounterSocial";
 import { useRef, useEffect, useState } from "react";
@@ -25,6 +27,8 @@ export default function Home() {
   
   const walletRef = useRef<WalletRefType | null>(null);
   const [nfts, setNfts] = useState<any[]>([]);
+  const [messageText, setMessageText] = useState("");
+  const [progressVisible, setProgressVisible] = useState(false);
 
   const convertNfts = (nftArray: any[]) => {
     let output: any[] = [];
@@ -117,16 +121,16 @@ export default function Home() {
                     <PostCard
                       title="Shot Glass Set"
                       userName="paola"
-                      amountOwed={nfts[0]?.amountOwed}
-                      nftAddress={nfts[0]?.address}
+                      amountOwed={nfts[1]?.amountOwed}
+                      nftAddress={nfts[1]?.address}
                       image={imgShotGlass}
                       avatar={avatar1}
-                    ></PostCard>{" "}
+                    ></PostCard>{" "} 
                       <PostCard
                         title="Polishing Cloths"
                         userName="waiano"
-                        amountOwed={nfts[1]?.amountOwed}
-                        nftAddress = {nfts[1]?.address}
+                        amountOwed={nfts[0]?.amountOwed}
+                        nftAddress = {nfts[0]?.address}
                         image={imgCloths}
                         avatar={avatar1}
                       ></PostCard>{" "}
@@ -137,6 +141,8 @@ export default function Home() {
           </div>
         </div>
       </RowLayout>
+      <MessageOverlay text={messageText}></MessageOverlay>
+      <ProgressOverlay visible={progressVisible}></ProgressOverlay>
     </main>
   );
 }

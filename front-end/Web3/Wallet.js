@@ -114,6 +114,7 @@ const Wallet = forwardRef((props, ref) => {
     const attachNftPolicies = async (nftAddress, policies) => {
         return await writeOperation("productNftIssuer", async (contract) => {
             console.log("attachNftPolicies", nftAddress, policies);
+            console.log(contract.address);
             return await contract.attachNftPolicies(
                 nftAddress, policies
             );
@@ -386,7 +387,6 @@ const Wallet = forwardRef((props, ref) => {
                 await connectWallet();
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = await provider.getSigner();
-            const userAddress = await signer.getAddress();
             
             const nft = new ethers.Contract(nftAddr, abi.productNft, signer);
             

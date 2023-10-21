@@ -9,6 +9,8 @@ import Wallet from "@/Web3/Wallet";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { ethers } from "ethers";
+import MessageOverlay from "@/Components/MessageOverlay/MessageOverlay";
+import ProgressOverlay from "@/Components/ProgressOverlay/ProgressOverlay";
 
 import imgFlask from "@/images/flask.png";
 import imgCloth from "@/images/cloth.png";
@@ -28,6 +30,8 @@ export default function Home() {
   
   const walletRef = useRef<WalletRefType | null>(null);
   const [nfts, setNfts] = useState<any[]>([]);
+  const [messageText, setMessageText] = useState("");
+  const [progressVisible, setProgressVisible] = useState(false);
 
   const onClickLike = () => {
   };
@@ -105,13 +109,16 @@ export default function Home() {
   
   //TODO: don't allow owner to buy their own supply
   const buy = async (nftAddress: string) => {
-    if (walletRef.current){
+    if (walletRef.current) {
+      setProgressVisible(true);
       const tokenId = await walletRef.current.getNextAvailableTokenId(nftAddress);
       if (tokenId > 0) {
         const tx = await walletRef.current.purchaseNft(nftAddress, tokenId);
         if (tx) {
           const rc = await tx.wait();
           console.log('Transaction hash:', tx.hash);
+          setProgressVisible(false);
+          setMessageText("tx hash: " + tx.hash);
           getNfts();
         }
       }
@@ -212,6 +219,8 @@ export default function Home() {
           </div>
         </div>
       </RowLayout>
+      <MessageOverlay text={messageText}></MessageOverlay>
+      <ProgressOverlay visible={progressVisible}></ProgressOverlay>
     </main>
   );
 }

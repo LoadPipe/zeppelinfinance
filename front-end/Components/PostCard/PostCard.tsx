@@ -29,7 +29,6 @@ const PostCard: React.FC<PostCardProps> = ({
   }
   const walletRef = useRef<WalletRefType | null>(null);
   
-  //TODO: test the claim functionality 
   const claim = async () => {
     if(walletRef.current){
       const tx = await walletRef.current.collectRoyalties(nftAddress, 1);
