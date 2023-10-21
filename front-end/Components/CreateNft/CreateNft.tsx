@@ -6,8 +6,10 @@ import Wallet from "@/Web3/Wallet";
 import Heading from "../Heading/Heading";
 import { useState, useRef } from "react";
 
-//TODO: the preview thing 
-//TODO: what is Flow ? 
+//TODO: loading screens 
+
+//TODO: controls should be invisible if not a seller 
+
 export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
   interface WalletRefType {
     createNft: (productName: string, fieldNames: string[], fieldValues: string[]) => Promise<any>;
@@ -17,7 +19,6 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
 
-  //TODO: upload file 
   const onDropFile = (files: any) => {
     console.log('drop');
     console.log(files);
@@ -44,7 +45,6 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
 
         //TODO: logs not available, can't get nft address 
         //get the new NFT's address 
-        /*
         rc.events.forEach((e: any) => {
           console.log(e);
           if (e.event == "NftCreated") {
@@ -52,7 +52,6 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
             console.log(newNftAddress);
           }
         });
-        */
       }
 
       return newNftAddress;

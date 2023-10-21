@@ -29,9 +29,10 @@ const PostCard: React.FC<PostCardProps> = ({
   }
   const walletRef = useRef<WalletRefType | null>(null);
   
+  //TODO: test the claim functionality 
   const claim = async () => {
     if(walletRef.current){
-      console.log("claim");
+      console.log("claim", nftAddress);
       const tx = await walletRef.current.collectRoyalties(nftAddress, 1);
       if (tx) {
         console.log('Transaction hash:', tx.hash);
