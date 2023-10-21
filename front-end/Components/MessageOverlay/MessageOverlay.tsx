@@ -7,11 +7,11 @@ interface MessageOverlayProps {
 }
 
 const MessageOverlay: React.FC<MessageOverlayProps> = ({ text, onClose }) => {
-  if (!text || !text.length) return null;
   
   const [isVisible, setIsVisible] = useState(true); 
 
   useEffect(() => {
+
     if (text) {
       const fadeOutTimeout = setTimeout(() => {
         setIsVisible(false);
@@ -29,6 +29,8 @@ const MessageOverlay: React.FC<MessageOverlayProps> = ({ text, onClose }) => {
       };
     }
   }, [text, onClose]);
+
+  if (!text || !text.length) return null;
 
   return (
     <div style={{
