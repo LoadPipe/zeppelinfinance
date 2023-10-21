@@ -120,11 +120,11 @@ export default function Home() {
         if (tx) {
           const rc = await tx.wait();
           console.log('Transaction hash:', tx.hash);
-          setProgressVisible(false);
-          setMessageText("tx hash: " + tx.hash);
+          setMessageText("Transaction hash: " + tx.hash);
           getNfts();
         }
       }
+      setProgressVisible(false);
     }
   }
 

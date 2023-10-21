@@ -6,6 +6,8 @@ import Wallet from "@/Web3/Wallet";
 import { useRef, useEffect, useState } from "react";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import SecondaryButton from "../SecondaryButton/SecondaryButton";
+import MessageOverlay from "@/Components/MessageOverlay/MessageOverlay";
+import ProgressOverlay from "@/Components/ProgressOverlay/ProgressOverlay";
 
 export interface PostCardProps {
   title: string;
@@ -28,14 +30,19 @@ const PostCard: React.FC<PostCardProps> = ({
     collectRoyalties: (nftAddress: string, tokenId: number) => Promise<any>;
   }
   const walletRef = useRef<WalletRefType | null>(null);
+  const [messageText, setMessageText] = useState("");
+  const [progressVisible, setProgressVisible] = useState(false);
   
   const claim = async () => {
     if(walletRef.current){
+      setProgressVisible(true);
       const tx = await walletRef.current.collectRoyalties(nftAddress, 1);
       if (tx) {
         const rc = await tx.wait();
         console.log('Transaction hash:', tx.hash);
+        setMessageText('Transaction hash:' + tx.hash);
       }
+      setProgressVisible(false);
     }
   };
   
@@ -72,6 +79,8 @@ const PostCard: React.FC<PostCardProps> = ({
       <br />
       <SecondaryButton>view stats</SecondaryButton>
       <br />
+      <MessageOverlay text={messageText}></MessageOverlay>
+      <ProgressOverlay visible={progressVisible}></ProgressOverlay>
     </div>
   );
 };

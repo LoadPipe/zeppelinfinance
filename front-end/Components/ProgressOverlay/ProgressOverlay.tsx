@@ -22,7 +22,7 @@ const ProgressOverlay: React.FC<ProgressOverlayProps> = ({ visible }) => {
       color: 'white',
       zIndex: 1000
     }}>
-      spinning...
+      <img src="/spinner3.gif"></img>
     </div>
   );
 }

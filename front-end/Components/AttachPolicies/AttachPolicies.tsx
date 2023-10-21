@@ -4,7 +4,6 @@ import Wallet from "@/Web3/Wallet";
 import Checkbox from "@/Components/CheckBox/CheckBox";
 import SecondaryButton from "../SecondaryButton/SecondaryButton";
 import { useState, useRef } from "react";
-import contractAddresses from "@/Web3/contracts/addresses";
 import Heading from "../Heading/Heading";
 import { initialChain } from "@/Chains/chains";
 import { getContractAddresses } from "@/Web3/Wallet";
