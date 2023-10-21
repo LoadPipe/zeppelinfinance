@@ -56,7 +56,7 @@ const Card: React.FC<CardProps> = (props) => {
             {title}
           </span>
         </div>
-        <div>{footer}</div>
+        <div className="position: absolute; bottom:0px">{footer}</div>
       </div>
     </div>
   );
