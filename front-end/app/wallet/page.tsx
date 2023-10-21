@@ -38,17 +38,21 @@ export default function Home() {
     return nftArray;
   }; 
 
-  const getNfts = async () => {
+  const getNfts = async (amountOwed: number) => {
     if (walletRef && walletRef.current) {
       const nftArray: any[] = convertNfts(await walletRef.current.getAmountsOwed());
       console.log(nftArray);
-      nftArray[0].amountOwed = 0.042;
+      nftArray[0].amountOwed = amountOwed;
       setNfts(nftArray);
     }
   };
+  
+  const onClaimed = async() => {
+    getNfts(0);
+  };
 
   useEffect(() => {
-    getNfts();
+    getNfts(0.042);
   }, []);
   
   return (
@@ -121,6 +125,7 @@ export default function Home() {
                       nftAddress={nfts[1]?.address}
                       image={imgShotGlass}
                       avatar={avatar1}
+                      onComplete={onClaimed}
                     ></PostCard>{" "} 
                       <PostCard
                         title="Polishing Cloths"
@@ -129,6 +134,7 @@ export default function Home() {
                         nftAddress = {nfts[0]?.address}
                         image={imgCloths}
                         avatar={avatar1}
+                        onComplete={onClaimed}
                       ></PostCard>{" "}
                   </div>
                 </div>

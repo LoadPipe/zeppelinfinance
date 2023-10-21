@@ -16,6 +16,7 @@ export interface PostCardProps {
   avatar: StaticImageData;
   nftAddress: string;
   amountOwed: number;
+  onComplete: () => void;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -24,7 +25,8 @@ const PostCard: React.FC<PostCardProps> = ({
   userName,
   avatar,
   nftAddress,
-  amountOwed
+  amountOwed, 
+  onComplete
 }: PostCardProps) => {
   interface WalletRefType {
     collectRoyalties: (nftAddress: string, tokenId: number) => Promise<any>;
@@ -41,6 +43,7 @@ const PostCard: React.FC<PostCardProps> = ({
         const rc = await tx.wait();
         console.log('Transaction hash:', tx.hash);
         setMessageText('Transaction hash:' + tx.hash);
+        onComplete();
       }
       setProgressVisible(false);
     }
