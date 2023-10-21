@@ -38,7 +38,7 @@ const Wallet = forwardRef((props, ref) => {
                     method: "wallet_switchEthereumChain",
                     params: [
                         {
-                            chainId: initialChain.chainId,
+                            chainId: initialChain.id,
                         },
                     ],
                 });

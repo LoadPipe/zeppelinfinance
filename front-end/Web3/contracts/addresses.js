@@ -12,6 +12,8 @@ module.exports = {
         policyFactory: '0xBC67c5D89906eE0E0C4A9F4926Ca26690bD4F804'
     },
     "matic_mumbai": {
+        securityManager: "0xe21656269BB86877c6F90B287b7bb26EF9127640",
+        productNftFactory: "0x30EE26f15D25ceF2dfAb4e6381b4077bcE080771",
         productNftStore: '0xADF789E61Bf38c463e4bA5B2B6E9C1Af6659e11b',
         productNftIssuer: '0x729895AaC3b1a776DcAd98c4d666e665d71a6E9F',
         zeppelinOracle: '0x4B36e6130b4931DCc5A64c4bca366790aAA068d1',
