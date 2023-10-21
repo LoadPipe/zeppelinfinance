@@ -64,9 +64,14 @@ export const AttachPolicies = (props: { onPoliciesAttached: any, nftAddress: str
             text="Or create a new custom reward policy."
           />
           <Checkbox
-            label="2% of sales (unlimited)"
+            label="1% of sales (unlimited)"
             checked={checkbox1}
             onChange={(event) => setCheckbox1(event.target.checked)}
+          />
+          <Checkbox
+            label="1.2% of affiliate sales"
+            checked={checkbox4}
+            onChange={(event) => setCheckbox4(event.target.checked)}
           />
           <Checkbox
             label="2% of sales, shared"
@@ -77,11 +82,6 @@ export const AttachPolicies = (props: { onPoliciesAttached: any, nftAddress: str
             label="3% of sales up to 25 units of inventory sold"
             checked={checkbox3}
             onChange={(event) => setCheckbox3(event.target.checked)}
-          />
-          <Checkbox
-            label="1.2% of affiliate sales"
-            checked={checkbox4}
-            onChange={(event) => setCheckbox4(event.target.checked)}
           />
         </div>
         <SecondaryButton>create new policy</SecondaryButton>
