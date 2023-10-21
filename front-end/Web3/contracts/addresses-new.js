@@ -10,7 +10,7 @@ module.exports = {
         affiliatePolicy: '0x6CB849f67A091f44A851f5c7DB37899099712473',
         financingPolicy: '0xd23135585a229c5809FEA64F414e24C25bDBB428',
         policyFactory: '0xBC67c5D89906eE0E0C4A9F4926Ca26690bD4F804'
-    },
+    }, 
     "matic_mumbai": {
         productNftStore: '0xADF789E61Bf38c463e4bA5B2B6E9C1Af6659e11b',
         productNftIssuer: '0x729895AaC3b1a776DcAd98c4d666e665d71a6E9F',
