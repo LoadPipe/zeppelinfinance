@@ -14,9 +14,6 @@ export const getContractAddresses = (chain) => {
     return contractAddresses[chain.key];
 }
 
-// I declare this a branch
-// Replaces connected with isAuthenticated
-
 const Wallet = forwardRef((props, ref) => {
     const { loginWeb3Auth, chainId, isAuthenticated, web3Provider, safes} = useAccountAbstraction();
     console.log('isAuthenticated:', isAuthenticated);
@@ -36,12 +33,15 @@ const Wallet = forwardRef((props, ref) => {
             const safeAccountAbstraction = new AccountAbstraction(signer)
             console.log('safeAccountAbstraction:', safeAccountAbstraction);
             await safeAccountAbstraction.init({ relayPack })
+
+            console.log('safes:', safes);
     
             const hasSafes = safes.length > 0
     
             const safeSelected = hasSafes ? safes[0] : await safeAccountAbstraction.getSafeAddress()
     
             setSafeSelected(safeSelected)
+            console.log('safeSelected:', safeSelected);
           }
         }
     
@@ -72,15 +72,14 @@ const Wallet = forwardRef((props, ref) => {
 
     const requestSignMessage = async () => {
         console.log(isAuthenticated);
-        if (!isAuthenticated) {
+        if (isAuthenticated) {
             if (account) {
                 try {
                     const provider = web3Provider;
-                    const signer = await provider.getSigner();
+                    const signer = provider.getSigner();
                     const message = randomHex(1);
                     const signature = await signer.signMessage(message);
                     console.log(signature);
-                    setisAuthenticated(true);
                 }
                 catch (e) {
                     console.error(e);
@@ -94,9 +93,10 @@ const Wallet = forwardRef((props, ref) => {
         
         try {
             if (web3Provider) {
-                if (!account)
+                if (!account) {
                     await connectWallet();
-                const signer = await web3Provider.getSigner();
+                }
+                const signer = web3Provider.getSigner();
                 console.log('signer:', await signer.getAddress());
 
                 if (!address)
@@ -190,7 +190,7 @@ const Wallet = forwardRef((props, ref) => {
     };
 
     const collectRoyalties = async (nftAddress, tokenId) => {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = web3Provider
         const signer = await provider.getSigner();
         const nft = new ethers.Contract(nftAddress, abi.productNft, signer);
 
@@ -205,12 +205,12 @@ const Wallet = forwardRef((props, ref) => {
 
     //READ-ONLY METHODS
     const getNftsOwned = async () => {
-        if (window.ethereum) {
+        if (web3Provider) {
             if (!account)
                 await connectWallet();
                 
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = await provider.getSigner();
+            const provider = web3Provider
+            const signer = provider.getSigner();
             const contract = new ethers.Contract(addresses.productNftStore, abi.productNftStore, signer);
 
             const userAddress = await signer.getAddress();
@@ -268,11 +268,11 @@ const Wallet = forwardRef((props, ref) => {
     };
 
     const getNftsForSale = async () => {
-        if (window.ethereum) {
+        if (web3Provider) {
             if (!account)
                 await connectWallet();
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = await provider.getSigner();
+            const provider = web3Provider
+            const signer = provider.getSigner();
             const userAddress = await signer.getAddress();
             const contract = new ethers.Contract(addresses.productNftStore, abi.productNftStore, signer);
 
@@ -343,8 +343,8 @@ const Wallet = forwardRef((props, ref) => {
     const getAmountsOwed = async () => {
         const nftsOwned = await getNftsOwned();
 
-        if (window.ethereum) {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
+        if (web3Provider) {
+            const provider = web3Provider
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(addresses.affiliatePayout, abi.affiliatePayout, signer);
 
@@ -374,8 +374,8 @@ const Wallet = forwardRef((props, ref) => {
     };
     
     const getNftPolicies = async (nftAddr) => {
-        if (window.ethereum) {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
+        if (web3Provider) {
+            const provider = web3Provider
             const signer = await provider.getSigner();
             
             const nft = new ethers.Contract(nftAddr, abi.productNft, signer);
@@ -399,11 +399,15 @@ const Wallet = forwardRef((props, ref) => {
     };
 
     const getNextAvailableTokenId = async (nftAddr) => {
-        if (window.ethereum) {
+        if (web3Provider) {
             if (!account)
                 await connectWallet();
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = await provider.getSigner();
+            const provider = web3Provider
+            const signer = provider.getSigner();
+
+            console.log('nfAddr:', nftAddr);
+            console.log('signer:', signer);
+            console.log('signer:', await signer.getAddress());
             
             const nft = new ethers.Contract(nftAddr, abi.productNft, signer);
             

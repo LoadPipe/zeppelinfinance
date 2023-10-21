@@ -127,6 +127,7 @@ export default function Home() {
 
   const getNfts = async () => {
     if (walletRef && walletRef.current) {
+      console.log(await walletRef.current.getNftsForSale())
       const nftArray: any[] = convertNfts(await walletRef.current.getNftsForSale());
       console.log(nftArray);
       setNfts(nftArray);
