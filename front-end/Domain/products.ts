@@ -1,46 +1,46 @@
-import imgCollection1 from "@/images/imgCollection1.png"
-import imgCollection2 from "@/images/imgCollection2.png"
-import imgCollection3 from "@/images/imgCollection3.png"
-import imgCollection4 from "@/images/imgCollection4.png"
+import imgFlask from "@/images/flask.png"
+import imgCloths from "@/images/cloth.png"
+import imgShelfMat from "@/images/shelfmat.png"
+import imgPourer from "@/images/pourer.png"
 import{productsProps} from "@/Domain/productsProps"
 
 
 export const products:productsProps[] =[
     {
-        title: "A Weird Thing",
+        title: "Polishing Cloths",
         price: 0.03,
         royalty: 15,
         affiliate: 8,
         bonus: "Yes",
         payout: 3,
         amount: "25/50",
-        image: imgCollection2,
+        image: imgCloths,
         alt: "product Logo",
         index: 1,
         collection: "Collectibles"
     },
     {
-        title: "Another Thing",
-        price: 0.03,
-        royalty: 15,
-        affiliate: 8,
-        bonus: "Yes",
-        payout: 3,
-        amount: "25/50",
-        image: imgCollection3,
+        title: "Interlocking Shelf Mat",
+        price: 0.02,
+        royalty: 1.4,
+        affiliate: 2.4,
+        bonus: "No",
+        payout: 0,
+        amount: "15/20",
+        image: imgShelfMat,
         alt: "product Logo",
         index: 1,
         collection: "Collectibles"
     },
     {
-        title: "Another Thing",
-        price: 0.03,
+        title: "13-pack Plastic Pourers",
+        price: 0.021,
         royalty: 15,
-        affiliate: 8,
+        affiliate: 1,
         bonus: "Yes",
-        payout: 3,
-        amount: "25/50",
-        image: imgCollection4,
+        payout: 1,
+        amount: "15/15",
+        image: imgPourer,
         alt: "product Logo",
         index: 1,
         collection: "Collectibles"

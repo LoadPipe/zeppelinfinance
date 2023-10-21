@@ -1,9 +1,9 @@
 import { CardProps, NftDataProps, FooterCardProps } from "../Components/Card/Card";
 
-import imgCollection1 from "@/images/imgCollection1.png"
-import imgCollection2 from "@/images/imgCollection2.png"
-import imgCollection3 from "@/images/imgCollection3.png"
-import imgCollection4 from "@/images/imgCollection4.png"
+import imgFlask from "@/images/flask.png"
+import imgCloths from "@/images/cloth.png"
+import imgShelfMat from "@/images/shelfmat.png"
+import imgPourer from "@/images/pourer.png"
 
 export const nftData: NftDataProps[] = [
     {
@@ -53,25 +53,25 @@ interface DataCard extends CardProps, FooterCardProps{
 
 export const cardsData:DataCard[] = [
     {
-        image:imgCollection1,
+        image:imgFlask,
         title:"Men's Drinking Flask Gift Set",
         flow: "1.3",
         alt: "string",
         likes:4,
     },{
-        image:imgCollection2,
+        image:imgCloths,
         title:"Polishing Cloth",
         flow: "4.7",
         alt: "string",
         likes:3,
     },{
-        image:imgCollection3,
-        title:"Professional Muddler, 10 in.",
+        image: imgShelfMat,
+        title:"Interlocking Shelf Mat",
         flow: "4.0",
         alt: "string",
         likes:0,
     },{
-        image:imgCollection4,
+        image:imgPourer,
         title:"13-pack Plastic Pourers",
         flow: "88",
         alt: "string",

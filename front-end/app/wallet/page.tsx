@@ -1,14 +1,9 @@
 "use client";
 import "./wallet.css";
-import CardRow, { RowItem } from "@/Components/CardRow/CardRow";
 import RowLayout from "@/Components/RowLayout/RowLayout";
-import OptionButton from "@/Components/OptionButton/OptionButton";
-import { products } from "@/Domain/products";
 import Image from "next/image";
 import Heading from "@/Components/Heading/Heading";
-import SecondaryButton from "@/Components/SecondaryButton/SecondaryButton";
 import PostCard from "@/Components/PostCard/PostCard";
-import imageArt from "@/images/art.png";
 import avatar1 from "@/images/avatar1.png";
 import ethereumIcon from "@/images/Ethereum.svg";
 import twitterIcon from "@/images/twitter.svg";
@@ -18,8 +13,9 @@ import backgroundImage from "@/images/background-header.jpg";
 import CounterSocial from "@/Components/CounterSocial/CounterSocial";
 import { useRef, useEffect, useState } from "react";
 import Wallet from "@/Web3/Wallet";
-import imgCollection1 from "@/images/imgCollection1.png";
-import imgCollection2 from "@/images/imgCollection2.png";
+import imgFlask from "@/images/flask.png";
+import imgCloths from "@/images/cloth.png";
+import imgShotGlass from "@/images/shotglass.png";
 import { ethers } from "ethers";
 
 export default function Home() {
@@ -118,20 +114,20 @@ export default function Home() {
                 </div>
                 <div className=" max-w-[920px] max-h-[638px]">
                   <div className="w-full flex gap-[24px]">
-                      <PostCard
-                        title="Men's Drinking Flask Gift Set"
-                        userName="waiano"
-                        amountOwed={nfts[0]?.amountOwed}
-                        nftAddress = {nfts[0]?.address}
-                        image={imgCollection1}
-                        avatar={avatar1}
-                      ></PostCard>{" "}
+                    <PostCard
+                      title="Shot Glass Set"
+                      userName="paola"
+                      amountOwed={nfts[0]?.amountOwed}
+                      nftAddress={nfts[0]?.address}
+                      image={imgShotGlass}
+                      avatar={avatar1}
+                    ></PostCard>{" "}
                       <PostCard
                         title="Polishing Cloths"
-                        userName="paola"
+                        userName="waiano"
                         amountOwed={nfts[1]?.amountOwed}
                         nftAddress = {nfts[1]?.address}
-                        image={imgCollection2}
+                        image={imgCloths}
                         avatar={avatar1}
                       ></PostCard>{" "}
                   </div>

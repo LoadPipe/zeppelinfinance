@@ -10,15 +10,14 @@ import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import imgCollection1 from "@/images/imgCollection1.png";
-import imgCollection2 from "@/images/imgCollection2.png";
-import imgCollection3 from "@/images/imgCollection3.png";
-import imgCollection4 from "@/images/imgCollection4.png";
+import imgFlask from "@/images/flask.png";
+import imgCloth from "@/images/cloth.png";
+import imgShotglass from "@/images/shotglass.png";
+import imgPourers from "@/images/pourer.png";
+import imgShelfMat from "@/images/shelfmat.png";
+import placeholderImage from "@/images/imgCollection3.png";
 
-//TODO: change to get from wallet login
-//TODO: add extra hard-coded NFTs
-//TODO: add in policy info 
-//TODO: correct images 
+//TODO: get chain dynamically
 
 export default function Home() {
   interface WalletRefType {
@@ -52,13 +51,17 @@ export default function Home() {
 
   const convertImageUrl = (nft: any) => {
     if (nft.productName.toLowerCase().indexOf("flask") >= 0)
-      return imgCollection1;
+      return imgFlask;
     if (nft.productName.toLowerCase().indexOf("cloth") >= 0)
-      return imgCollection2;
+      return imgCloth;
     if (nft.productName.toLowerCase().indexOf("pourer") >= 0)
-      return imgCollection3;
+      return imgPourers;
+    if (nft.productName.toLowerCase().indexOf("shot glass") >= 0)
+      return imgShotglass;
+    if (nft.productName.toLowerCase().indexOf("shelf mat") >= 0)
+      return imgShelfMat;
 
-    return imgCollection4;
+    return placeholderImage;
   }
   
   const getRoyalty = (nft: any) => {
@@ -101,6 +104,7 @@ export default function Home() {
     return output; 
   }; 
   
+  //TODO: don't allow owner to buy their own supply
   const buy = async (nftAddress: string) => {
     if (walletRef.current){
       const tokenId = await walletRef.current.getNextAvailableTokenId(nftAddress);
@@ -204,7 +208,7 @@ export default function Home() {
                 <RowItem color="red" bold>
                   {nft.amount}
                 </RowItem>
-                <RowItem><button className="text-center text-orange-500 text-base font-semibold leading-normal px-6 py-3 bg-white rounded-xl border border-slate-300 " onClick={() => buy(nft.address)}>buy</button></RowItem>
+                <RowItem><button className="text-center text-orange-500 text-base font-semibold leading-normal px-6 py-3 bg-white rounded-xl border border-slate-300 " onClick={() => buy(nft.address)}>mint</button></RowItem>
               </CardRow>
             ))}
           </div>
