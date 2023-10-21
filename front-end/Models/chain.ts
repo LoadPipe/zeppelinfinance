@@ -8,7 +8,8 @@ type Chain = {
     icon?: string
     blockExplorerUrl: string
     transactionServiceUrl?: string
-    faucetUrl?: string
+    faucetUrl?: string, 
+    key: string
   }
   
   export default Chain

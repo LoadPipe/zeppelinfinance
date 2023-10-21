@@ -6,6 +6,10 @@ import SecondaryButton from "../SecondaryButton/SecondaryButton";
 import { useState, useRef } from "react";
 import contractAddresses from "@/Web3/contracts/addresses";
 import Heading from "../Heading/Heading";
+import { initialChain } from "@/Chains/chains";
+import { getContractAddresses } from "@/Web3/Wallet";
+
+const addresses = getContractAddresses(initialChain);
 
 export const AttachPolicies = (props: { onPoliciesAttached: any, nftAddress: string}) => {
   interface WalletRefType {
@@ -16,7 +20,6 @@ export const AttachPolicies = (props: { onPoliciesAttached: any, nftAddress: str
   const [checkbox2, setCheckbox2] = useState(false);
   const [checkbox3, setCheckbox3] = useState(false);
   const [checkbox4, setCheckbox4] = useState(false);
-  const addresses = contractAddresses["sepolia"]; 
 
   const { onPoliciesAttached, nftAddress } = props;
 

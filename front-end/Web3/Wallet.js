@@ -3,8 +3,13 @@ import { ethers } from "ethers";
 import abi from "./contracts/abi";
 import contractAddresses from "@/Web3/contracts/addresses";
 import { randomHex } from 'web3-utils';
+import { chains, initialChain } from '@/Chains/chains';
 
-const addresses = contractAddresses["sepolia"];
+const addresses = contractAddresses[initialChain.key];
+
+export const getContractAddresses = (chain) => {
+    return contractAddresses[chain.key];
+}
 
 const Wallet = forwardRef((props, ref) => {
     const [account, setAccount] = useState(null);
@@ -33,7 +38,7 @@ const Wallet = forwardRef((props, ref) => {
                     method: "wallet_switchEthereumChain",
                     params: [
                         {
-                            chainId: process.env.chainId || "0xaa36a7",
+                            chainId: initialChain.chainId,
                         },
                     ],
                 });
