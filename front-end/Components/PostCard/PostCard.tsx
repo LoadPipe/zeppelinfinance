@@ -76,7 +76,8 @@ const PostCard: React.FC<PostCardProps> = ({
         <ButtonLike></ButtonLike>
       </div>
       <br />
-      {amountOwed && <button className="text-center text-orange-500 text-base font-semibold leading-normal px-6 py-3 bg-white rounded-xl border border-slate-300" onClick={() => claim()}>claim {amountOwed} ETH</button>}
+      {amountOwed && <button className="text-center text-white text-base/[16px] font-semibold px-6 py-3 bg-[#F26120] rounded-xl justify-center" onClick={() => claim()}>claim {amountOwed} ETH</button>}
+      {!amountOwed && <button className="text-center text-orange-500 text-base font-semibold leading-normal px-6 py-3 bg-white rounded-xl border border-slate-300">claim 0 ETH</button>}
       <br />
       <SecondaryButton>sell</SecondaryButton>
       <br />
