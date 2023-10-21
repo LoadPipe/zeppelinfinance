@@ -55,12 +55,44 @@ export const mumbaiChain: Chain = {
   faucetUrl: 'https://mumbaifaucet.com/'
 }
 
+export const sepoliaChain: Chain = {
+  id: '0xaa36a7',
+  token: 'ETH',
+  shortName: 'ETH',
+  label: 'Sepolia',
+  rpcUrl: 'https://rpc.sepolia.org',
+  blockExplorerUrl: 'https://sepolia.etherscan.io/',
+  color: '#8248E5',
+  faucetUrl: 'https://sepoliafaucet.com/'
+}
+
+export const maticZkevmGoerli: Chain = {
+  id: '0x5a2',
+  token: 'matic',
+  shortName: 'matic',
+  label: 'Matic ZKEVM',
+  rpcUrl: 'https://rpc.public.zkevm-test.net',
+  blockExplorerUrl: 'https://zkevm.polygonscan.com/',
+  color: '#8248E5',
+  faucetUrl: 'https://faucet.quicknode.com/polygon/zkevm-goerli'
+}
+
+export const scrollSepolia: Chain = {
+  id: '0x8274f',
+  token: 'ETH',
+  shortName: 'ETH',
+  label: 'Scroll Sepolia',
+  rpcUrl: 'https://scroll-sepolia.blockpi.network/v1/rpc/public',
+  blockExplorerUrl: 'https://sepolia-blockscout.scroll.io/',
+  color: '#8248E5',
+  faucetUrl: 'https://faucet.quicknode.com/scroll/sepolia'
+}
+
 //TODO: ADD OTHER SUPPORTED CHAINS
 // POLYGON ZK
 // SCROLL
-// SEPOLIA
 
-const chains: Chain[] = [gnosisChain, goerliChain, mainnetChain, mumbaiChain, polygonChain]
+const chains: Chain[] = [sepoliaChain, maticZkevmGoerli, scrollSepolia, mumbaiChain, gnosisChain, goerliChain, mainnetChain, polygonChain]
 
 export const initialChain = mumbaiChain
 
