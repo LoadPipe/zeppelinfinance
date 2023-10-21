@@ -75,7 +75,7 @@ export const FooterCard: React.FC<FooterCardProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-between mt-6">
-      <PrimaryButton> Buy now</PrimaryButton>
+      <PrimaryButton> Mint now</PrimaryButton>
       <ButtonLike likes={likes} isLiked={isLiked} onClick={onClickLike} />
     </div>
   );

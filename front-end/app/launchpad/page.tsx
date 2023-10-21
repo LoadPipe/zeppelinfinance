@@ -178,7 +178,7 @@ export default function Home() {
               <p>Amount</p>
             </div>
             <div className="flex items-center justify-center flex-1">
-              <p>Buy</p>
+              <p>Mint</p>
             </div>
           </div>
           <div className="flex flex-col gap-2 mb-16">
