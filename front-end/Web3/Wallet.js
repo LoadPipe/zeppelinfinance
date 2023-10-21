@@ -18,7 +18,7 @@ export const getContractAddresses = (chain) => {
 // Replaces connected with isAuthenticated
 
 const Wallet = forwardRef((props, ref) => {
-    const { loginWeb3Auth, logoutWeb3Auth, isAuthenticated, web3Provider, safes} = useAccountAbstraction();
+    const { loginWeb3Auth, chainId, isAuthenticated, web3Provider, safes} = useAccountAbstraction();
     console.log('isAuthenticated:', isAuthenticated);
     const [account, setAccount] = useState(null);
     const [signer, setSigner] = useState(null);
@@ -105,6 +105,7 @@ const Wallet = forwardRef((props, ref) => {
 
                 if (contract) {
                     const tx = await func(contract);
+                    console.log(tx)
                     //console.log(tx);
                     return tx;
                 }
