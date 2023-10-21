@@ -18,6 +18,7 @@ import linkedinIcon from "@/images/Linkedin.svg";
 import pinterestIcon from "@/images/Pinterest.svg";
 import Subtitle from "@/Components/Subtitle/Subtitle";
 import Footer from "@/Components/Footer/Footer";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -47,8 +48,8 @@ export default function Home() {
                 </span>
               </div>
               <div className="flex gap-[24px]">
-                <PrimaryButton> Browse Launchpad </PrimaryButton>
-                <SecondaryButton> Create Collection</SecondaryButton>
+                <Link href="/launchpad"><PrimaryButton> Browse Launchpad </PrimaryButton></Link>
+                <Link href="/create-collection"><SecondaryButton> Create Collection</SecondaryButton></Link>
               </div>
             </div>
             <div>

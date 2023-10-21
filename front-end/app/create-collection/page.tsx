@@ -1,12 +1,8 @@
 "use client";
 import Card, { FooterCard } from "@/Components/Card/Card";
 import RowLayout from "@/Components/RowLayout/RowLayout";
-import Input from "@/Components/Input/Input";
 import image from "@/images/imgCollection1.png";
-import PrimaryButton from "@/Components/PrimaryButton/PrimaryButton";
 import Heading from "@/Components/Heading/Heading";
-import UploadFile from "@/Components/UploadFile/UploadFile";
-import Subtitle from "@/Components/Subtitle/Subtitle";
 import { CreateNft } from "@/Components/CreateNft/CreateNft"; 
 import Wallet from "@/Web3/Wallet";
 import { useState, useRef } from "react";
@@ -86,7 +82,7 @@ export default function Home() {
               alt="imagen"
               flow="0.03"
               image={image}
-              title="Men's Drinking Flask Gift Set"
+              title="Men's Drinking Flask Set"
               isPreview
               footer={<FooterCard likes={33} />}
             />
