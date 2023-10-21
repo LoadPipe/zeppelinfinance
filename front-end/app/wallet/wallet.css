@@ -1,0 +1,10 @@
+.bg-wallet{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: linear-gradient(90deg, rgba(225,214,225,1) 0%, rgb(241 203 241) 100%);
+}
+
+.transform-perfil{
+    transform: translateY(-54px)
+}
