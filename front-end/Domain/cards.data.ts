@@ -55,13 +55,13 @@ interface DataCard extends CardProps, FooterCardProps{
 export const cardsData:DataCard[] = [
     {
         image:imgShotGlass,
-        title:"Shot Glass Set",
+        title:"Shot Glass Set - 6 glasses",
         flow: "1.3",
         alt: "string",
         likes:4,
     },{
         image:imgCloths,
-        title:"Polishing Cloth",
+        title:"Polishing Cloths 10 pack box",
         flow: "4.7",
         alt: "string",
         likes:3,
