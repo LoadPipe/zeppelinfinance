@@ -88,6 +88,11 @@ export default function Home() {
             />
           </div>
           }
+          {!previewVisible &&
+            <div className="flex flex-1 justify-center h-[568px]">
+              &nbsp;
+            </div>
+          }
         </div>
       </RowLayout>
     </main>
