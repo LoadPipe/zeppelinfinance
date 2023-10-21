@@ -11,6 +11,8 @@ export const getContractAddresses = (chain) => {
     return contractAddresses[chain.key];
 }
 
+// I declare this a branch
+
 const Wallet = forwardRef((props, ref) => {
     const [account, setAccount] = useState(null);
     const [signer, setSigner] = useState(null);
