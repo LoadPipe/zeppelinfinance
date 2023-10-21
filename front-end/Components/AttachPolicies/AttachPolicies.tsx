@@ -28,7 +28,6 @@ export const AttachPolicies = (props: { onPoliciesAttached: any, nftAddress: str
       const tx = await walletRef.current.attachNftPolicies(nftAddress, policies);
 
       if (tx) {
-        console.log('Transaction hash:', tx.hash);
         const rc = await tx.wait();
         console.log('Transaction hash:', tx.hash);
         return true;

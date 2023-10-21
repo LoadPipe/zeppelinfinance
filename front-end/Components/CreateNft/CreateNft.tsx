@@ -20,8 +20,6 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
   const [brand, setBrand] = useState("");
 
   const onDropFile = (files: any) => {
-    console.log('drop');
-    console.log(files);
     setFiles(files);
     onFileDropped();
   };
@@ -38,10 +36,8 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
 
       if (tx) {
         console.log(tx);
-        console.log('Transaction hash:', tx.hash);
         const rc = await tx.wait();
         console.log('Transaction hash:', tx.hash);
-        console.log(rc);
 
         //TODO: logs not available, can't get nft address 
         //get the new NFT's address 
@@ -49,7 +45,6 @@ export const CreateNft = (props: { onNftCreated: any, onFileDropped: any }) => {
           console.log(e);
           if (e.event == "NftCreated") {
             newNftAddress = e.args.nftAddress;
-            console.log(newNftAddress);
           }
         });
       }

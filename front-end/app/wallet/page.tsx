@@ -42,7 +42,7 @@ export default function Home() {
     if (walletRef && walletRef.current) {
       const nftArray: any[] = convertNfts(await walletRef.current.getAmountsOwed());
       console.log(nftArray);
-      nftArray[0].amountOwed = 1;
+      nftArray[0].amountOwed = 0.042;
       setNfts(nftArray);
     }
   };

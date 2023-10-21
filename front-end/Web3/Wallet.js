@@ -32,8 +32,6 @@ const Wallet = forwardRef((props, ref) => {
                     { method: 'eth_requestAccounts' }
                 );
 
-
-                console.log('requesting...');
                 await window.ethereum.request({
                     method: "wallet_switchEthereumChain",
                     params: [
@@ -45,7 +43,6 @@ const Wallet = forwardRef((props, ref) => {
 
                 setAccount(await signer.getAddress());
                 setSigner(signer);
-                console.log(await signer.getAddress());
             } else {
                 alert("Please install MetaMask.");
             }
@@ -92,7 +89,7 @@ const Wallet = forwardRef((props, ref) => {
 
                 if (contract) {
                     const tx = await func(contract);
-                    console.log(tx);
+                    //console.log(tx);
                     return tx;
                 }
             } else {
@@ -106,7 +103,6 @@ const Wallet = forwardRef((props, ref) => {
 
     const createNft = async (productName, fieldNames, fieldValues) => {
         return await writeOperation("productNftIssuer", async (contract) => {
-            console.log("createNft", productName, fieldNames, fieldValues);
 
             return await contract.createNft(
                 productName, "CVR",
@@ -176,12 +172,9 @@ const Wallet = forwardRef((props, ref) => {
     };
 
     const collectRoyalties = async (nftAddress, tokenId) => {
-
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = await provider.getSigner();
         const nft = new ethers.Contract(nftAddress, abi.productNft, signer);
-        console.log('owner of token:', await nft.ownerOf(tokenId));
-        console.log('owner of nft:', await nft.owner());
 
         return await writeOperation("affiliatePayout", async (contract) => {
             console.log("buyerWithdraw", nftAddress, tokenId);
@@ -262,7 +255,6 @@ const Wallet = forwardRef((props, ref) => {
                 await connectWallet();
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = await provider.getSigner();
-            console.log("signer:", signer);
             const userAddress = await signer.getAddress();
             const contract = new ethers.Contract(addresses.productNftStore, abi.productNftStore, signer);
 
@@ -368,7 +360,6 @@ const Wallet = forwardRef((props, ref) => {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = await provider.getSigner();
             
-            console.log(nftAddr);
             const nft = new ethers.Contract(nftAddr, abi.productNft, signer);
             const policyAddresses = await nft.getPolicies(); 
             const promises = [];
@@ -385,7 +376,6 @@ const Wallet = forwardRef((props, ref) => {
                 output[policyAddresses[i]] = JSON.parse(results[i]);
             });
             
-            console.log(output);
             return output;
         }
     };

@@ -40,7 +40,6 @@ export default function Home() {
   }
 
   const onPosted = (done: boolean) => {
-    console.log("DONE");
     //Changed this to an empty string from null, let's hope it doesn't break anything
     setNftAddress('');
     setPoliciesAttached(false);

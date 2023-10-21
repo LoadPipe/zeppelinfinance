@@ -30,7 +30,6 @@ export default function Home() {
   const [nfts, setNfts] = useState<any[]>([]);
 
   const onClickLike = () => {
-    console.log("me dieron like");
   };
   
   const convertNfts = (nftArray: any[]) => {
@@ -111,7 +110,6 @@ export default function Home() {
       if (tokenId > 0) {
         const tx = await walletRef.current.purchaseNft(nftAddress, tokenId);
         if (tx) {
-          console.log('Transaction hash:', tx.hash);
           const rc = await tx.wait();
           console.log('Transaction hash:', tx.hash);
           getNfts();

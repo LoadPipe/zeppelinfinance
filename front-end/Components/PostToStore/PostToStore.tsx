@@ -20,13 +20,11 @@ export const PostToStore = (props: { onPosted: any, nftAddress: string }) => {
       const tx1 = await walletRef.current.postToStore(nftAddress, price);
 
       if (tx1) {
-        console.log('Transaction hash:', tx1.hash);
         const rc = await tx1.wait();
         console.log('Transaction hash:', tx1.hash);
         
         const tx2 = await walletRef.current.postForSale(nftAddress);
         if (tx2) {
-          console.log('Transaction hash:', tx2.hash);
           const rc = await tx2.wait();
           console.log('Transaction hash:', tx2.hash);
           return true;

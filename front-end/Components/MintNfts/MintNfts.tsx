@@ -25,7 +25,6 @@ export const MintNfts = (props: { onMinted: any, nftAddress: string }) => {
       const tx = await walletRef.current.mintNfts(nftAddress, quantity, ["affiliateId"], affiliateIds);
 
       if (tx) {
-        console.log('Transaction hash:', tx.hash);
         const rc = await tx.wait();
         console.log('Transaction hash:', tx.hash);
         return true;
