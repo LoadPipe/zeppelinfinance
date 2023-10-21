@@ -4,6 +4,7 @@ import imgFlask from "@/images/flask.png"
 import imgCloths from "@/images/cloth.png"
 import imgShelfMat from "@/images/shelfmat.png"
 import imgPourer from "@/images/pourer.png"
+import imgShotGlass from "@/images/shotglass.png"
 
 export const nftData: NftDataProps[] = [
     {
@@ -53,8 +54,8 @@ interface DataCard extends CardProps, FooterCardProps{
 
 export const cardsData:DataCard[] = [
     {
-        image:imgFlask,
-        title:"Men's Drinking Flask Gift Set",
+        image:imgShotGlass,
+        title:"Shot Glass Set",
         flow: "1.3",
         alt: "string",
         likes:4,
