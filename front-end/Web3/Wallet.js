@@ -4,6 +4,9 @@ import abi from "./contracts/abi";
 import contractAddresses from "@/Web3/contracts/addresses";
 import { randomHex } from 'web3-utils';
 import { chains, initialChain } from '@/Chains/chains';
+import { useAccountAbstraction } from '@/Store/accountAbstractionContext'
+import { GelatoRelayPack } from '@safe-global/relay-kit'
+import AccountAbstraction from '@safe-global/account-abstraction-kit-poc'
 
 const addresses = contractAddresses[initialChain.key];
 
@@ -12,41 +15,52 @@ export const getContractAddresses = (chain) => {
 }
 
 // I declare this a branch
+// Replaces connected with isAuthenticated
 
 const Wallet = forwardRef((props, ref) => {
+    const { loginWeb3Auth, logoutWeb3Auth, isAuthenticated, web3Provider, safes} = useAccountAbstraction();
+    console.log('isAuthenticated:', isAuthenticated);
     const [account, setAccount] = useState(null);
     const [signer, setSigner] = useState(null);
-    const [connected, setConnected] = useState(false);
+    const [safeSelected, setSafeSelected] = useState('')
+
 
     useEffect(() => {
-        connectWallet();
-    }, []);
+        const getSafeAddress = async () => {
+          if (web3Provider) {
+            const signer = web3Provider.getSigner()
+            console.log(signer);
+            console.log('signer:', await signer.getAddress());
+            const relayPack = new GelatoRelayPack();
+            console.log('relayPack:', relayPack);
+            const safeAccountAbstraction = new AccountAbstraction(signer)
+            console.log('safeAccountAbstraction:', safeAccountAbstraction);
+            await safeAccountAbstraction.init({ relayPack })
+    
+            const hasSafes = safes.length > 0
+    
+            const safeSelected = hasSafes ? safes[0] : await safeAccountAbstraction.getSafeAddress()
+    
+            setSafeSelected(safeSelected)
+          }
+        }
+    
+        getSafeAddress()
+    }, [safes, web3Provider])
 
     const connectWallet = async () => {
         try {
-            if (window.ethereum) {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = await provider.getSigner();
+            if (isAuthenticated) {
+                const provider = web3Provider;
+                const signer = provider.getSigner();
                 
                 console.log('connecting...');
 
-                await window.ethereum.request(
-                    { method: 'eth_requestAccounts' }
-                );
-
-                await window.ethereum.request({
-                    method: "wallet_switchEthereumChain",
-                    params: [
-                        {
-                            chainId: initialChain.id,
-                        },
-                    ],
-                });
-
-                setAccount(await signer.getAddress());
+                setAccount(safeSelected);
                 setSigner(signer);
             } else {
-                alert("Please install MetaMask.");
+                alert("Please Sign in");
+                loginWeb3Auth();
             }
         }
         catch (e) {
@@ -54,17 +68,19 @@ const Wallet = forwardRef((props, ref) => {
         }
     };
 
+    
+
     const requestSignMessage = async () => {
-        console.log(connected);
-        if (!connected) {
-            if (window.ethereum && account) {
+        console.log(isAuthenticated);
+        if (!isAuthenticated) {
+            if (account) {
                 try {
-                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const provider = web3Provider;
                     const signer = await provider.getSigner();
                     const message = randomHex(1);
                     const signature = await signer.signMessage(message);
                     console.log(signature);
-                    setConnected(true);
+                    setisAuthenticated(true);
                 }
                 catch (e) {
                     console.error(e);
@@ -77,12 +93,10 @@ const Wallet = forwardRef((props, ref) => {
     const writeOperation = async (contractName, func, address = null) => {
         
         try {
-            if (window.ethereum) {
+            if (web3Provider) {
                 if (!account)
                     await connectWallet();
-
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = await provider.getSigner();
+                const signer = await web3Provider.getSigner();
                 console.log('signer:', await signer.getAddress());
 
                 if (!address)
