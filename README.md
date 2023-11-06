@@ -1,7 +1,25 @@
-# zeppelinfinance
+# Zeppelin Finance
 
-This is the branch
+## Setup & Operation
 
-Now frozen
+### Setup
+- install node and npm 
+- install hardhat globally
+- create .env file (using example.env as example)
+```
+npm install
+yarn install
+```
 
-Which was submitted for EthGlobal EthOnline 2023.
+### Compile Solidity Contracts
+```
+npx hardhat compile
+```
+
+### Run Unit Tests
+```
+npx hardhat test
+```
+
+```
+
