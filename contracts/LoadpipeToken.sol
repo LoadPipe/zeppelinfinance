@@ -8,6 +8,11 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "./interfaces/ISecurityManager.sol";
 import "./ManagedSecurity.sol";
 
+//TODO: (TOKEN) add deployment methods for token 
+//TODO: (TOKEN) add basic tests for token 
+//TODO: (TOKEN) add upgradeable tests for token 
+//TODO: (TOKEN) add icon image for token in etherscan, metamask, etc. 
+
 /**
  * @title LoadpipeToken
  * 
