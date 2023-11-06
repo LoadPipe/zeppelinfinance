@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "@openzeppelin/contracts/interfaces/IERC165.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/interfaces/IERC165Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import "./interfaces/ISecurityManager.sol";
 import "./ManagedSecurity.sol";
@@ -16,19 +17,31 @@ import "./ManagedSecurity.sol";
  * Anduril Analytics 
  * Licensed to Loadpipe.io 2023
  */
-//TODO: make upgradeable
 contract LoadpipeToken is 
-        IERC165, 
-        ERC20Pausable, 
-        ManagedSecurity
+        Initializable,
+        IERC165Upgradeable, 
+        ERC20PausableUpgradeable, 
+        ManagedSecurity, 
+        UUPSUpgradeable
 {            
     address public vaultAddress; 
+    bool public frozen;
             
     //ERC20
     uint8 internal _decimals;
     
     //errors
     error TokenTransferFailed();
+    error UpgradeFrozen();
+    
+    /**
+     * Returns a hard-coded version number pair (major + minor). 
+     * 
+     * @return (major, minor)
+     */
+    function version() external virtual pure returns (uint8, uint8) {
+        return (1, 0);
+    }
     
     /**
      * Constructs an instance of the token.
@@ -41,7 +54,9 @@ contract LoadpipeToken is
      * @param initialSupply If 0, this will be ignored; otherwise this quantity will be minted to the 
      * caller of the constructor.
      */
-    constructor(ISecurityManager _securityManager, uint256 initialSupply) ERC20("Loadpipe", "LPT") {
+    function initialize(ISecurityManager _securityManager, uint256 initialSupply) external initializer {
+        
+        __ERC20_init("Loadpipe", "LOAD"); 
         _decimals = 18;
         
         //security manager
@@ -51,6 +66,8 @@ contract LoadpipeToken is
         if (initialSupply > 0) {
             _mint(_msgSender(), initialSupply); 
         }
+        
+        frozen = false;
     }
     
     /**
@@ -167,11 +184,51 @@ contract LoadpipeToken is
     function supportsInterface(bytes4 interfaceId)
         public
         pure
-        override (IERC165)
+        override (IERC165Upgradeable)
         returns (bool)
     {
         return 
-            interfaceId == type(IERC165).interfaceId || 
-            interfaceId == type(IERC20).interfaceId; 
+            interfaceId == type(IERC165Upgradeable).interfaceId || 
+            interfaceId == type(IERC20Upgradeable).interfaceId; 
+    }
+    
+    /**
+     * Authorizes users wtih the UPGRADER role to upgrade the implementation. 
+     * 
+     * Reverts: 
+     * - {UpgradeFrozen} if {frozen} is true.
+     */
+    function _authorizeUpgrade(address) internal virtual override onlyRole(UPGRADER_ROLE) { 
+        if (frozen) {
+            revert UpgradeFrozen(); 
+        }
+    }
+    
+    /**
+     * From the time that this is called by the authorized caller, no more upgrades can ever be 
+     * made again; upgradeability is frozen forever. 
+     */
+    function freeze() external onlyRole(UPGRADER_ROLE) {
+        frozen = true;
+    }
+    
+    /**
+     * See { ContextUpgradeable._msgSender }. 
+     * This needs to be overridden for multiple-inheritance reasons. 
+     * 
+     * @return address 
+     */
+    function _msgSender() internal override(Context, ContextUpgradeable) view returns(address) {
+        return super._msgSender(); 
+    }
+    
+    /**
+     * See { ContextUpgradeable._msgData }. 
+     * This needs to be overridden for multiple-inheritance reasons. 
+     * 
+     * @return bytes calldata 
+     */
+    function _msgData() internal override(Context, ContextUpgradeable) view returns(bytes calldata) {
+        return super._msgData(); 
     }
 }
