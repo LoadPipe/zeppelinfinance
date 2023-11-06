@@ -1,13 +1,13 @@
 import { ethers } from "hardhat";
-import { 
-    SecurityManager, 
-    Whitelist, 
-    ContractSizer, 
-    ProductNft, 
+import {
+    SecurityManager,
+    Whitelist,
+    ContractSizer,
+    ProductNft,
     ProductNftFactory,
-    ProductNftIssuer, 
-    ProductNftStore, 
-    ZeppelinOracle, 
+    ProductNftIssuer,
+    ProductNftStore,
+    ZeppelinOracle,
     AffiliatePayout,
     NftPolicyFactory,
     FinancingRewardPolicy,
@@ -124,7 +124,7 @@ export async function deployProductNftStore(
         accounts[0]
     ));
 
-    return (await factory.deploy(securityMgrAddr)) as ProductNftStore; 
+    return (await factory.deploy(securityMgrAddr)) as ProductNftStore;
 }
 
 export async function deployZeppelinOracle(
@@ -197,9 +197,9 @@ export async function deployNftRefundPolicy(
 }
 
 export async function deployNftPolicyFactory(
-    securityMgrAddr: string | Addressable, 
-    supportsTableland: boolean = false, 
-    tablePrefix: string = "", 
+    securityMgrAddr: string | Addressable,
+    supportsTableland: boolean = false,
+    tablePrefix: string = "",
     tableId: number = 0
 ) {
     const accounts = await ethers.getSigners();

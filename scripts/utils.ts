@@ -23,15 +23,19 @@ export async function getNftContract(address: string | Addressable) {
 }
 
 export async function getNftIssuerContract(network: string) {
-    return await ethers.getContractAt("ProductNftIssuer", addresses[network].nftIssuer)
+    return await ethers.getContractAt("ProductNftIssuer", addresses[network].productNftIssuer)
+}
+
+export async function getNftFactoryContract(network: string) {
+    return await ethers.getContractAt("ProductNftFactory", addresses[network].productNftFactory)
 }
 
 export async function getNftStoreContract(network: string) {
-    return await ethers.getContractAt("ProductNftStore", addresses[network].nftStore)
+    return await ethers.getContractAt("ProductNftStore", addresses[network].productNftStore)
 }
 
 export async function getZeppelinContract(network: string) {
-    return await ethers.getContractAt("ZeppelinOracle", addresses[network].zeppelin)
+    return await ethers.getContractAt("ZeppelinOracle", addresses[network].zeppelinOracle)
 }
 
 export async function getPayoutContract(network: string) {

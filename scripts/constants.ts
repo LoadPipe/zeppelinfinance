@@ -44,7 +44,7 @@ export const addresses: any = {
         securityManager: "0x0e36956c9be3B09A4a22DFb58C726bBc9F8b9F84",      //verified
         productNftFactory: "0x129086dCB12a4D03944084330c84941F17Abb08F",    //verified
         productNftStore: '0x72Ea52E44624aFe3FBc4A07837d73d9C21374598',      //verified
-        productNftIssuer: '0x70E37D8627b91273F0dD0282aA272442811Ed468',
+        productNftIssuer: '0x70E37D8627b91273F0dD0282aA272442811Ed468',     //    
         zeppelinOracle: '0x9715576a50056E83fbf16845A670BdfF739f364A',       //verified
         affiliatePayout: '0x5C8CBD4DB05e82E72c4ac0624Bac126ADB88A8a2',
         refundPolicy: '0xb196a361B3d99EF9d808ff7260ead4981ab3c33e',
