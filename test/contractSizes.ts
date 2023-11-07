@@ -10,7 +10,8 @@ import {
     deployAffiliatePayout,
     deployNftPolicyFactory,
     deployContractSizer,
-    getTestAddresses
+    getTestAddresses,
+    deployLoadpipeToken
 } from "./utils";
 import * as constants from "./constants";
 import {
@@ -23,7 +24,8 @@ import {
     ProductNftStore,
     ZeppelinOracle,
     NftPolicyFactory,
-    AffiliatePayout
+    AffiliatePayout,
+    LoadpipeToken
 } from "typechain";
 
 describe("Contract Sizes", function () {
@@ -36,6 +38,7 @@ describe("Contract Sizes", function () {
     let productNftStore: ProductNftStore;
     let affiliatePayout: AffiliatePayout;
     let nftPolicyFactory: NftPolicyFactory;
+    let loadpipeToken: any;
     let zeppelin: ZeppelinOracle;
 
     this.beforeEach(async function () {
@@ -55,6 +58,7 @@ describe("Contract Sizes", function () {
             securityManager.target.toString(), productNftFactory.target.toString(), productNftStore.target.toString()
         );
         nftPolicyFactory = await deployNftPolicyFactory(securityManager.target);
+        loadpipeToken = await deployLoadpipeToken(securityManager.target); 
     });
 
     describe("Read Contract Sizes", function () {
@@ -68,7 +72,9 @@ describe("Contract Sizes", function () {
                 "ZeppelinOracle",
                 "NftPolicyFactory",
                 "Whitelist",
-                "SecurityManager"
+                "SecurityManager", 
+                "LoadpipeTokenProxy"
+                //TODO: (TEST) also check size of the real token 
             ];
             const contractSizes = await Promise.all([
                 contractSizer.getContractSize(productNft.target.toString()),
@@ -79,7 +85,8 @@ describe("Contract Sizes", function () {
                 contractSizer.getContractSize(zeppelin.target.toString()),
                 contractSizer.getContractSize(nftPolicyFactory.target.toString()),
                 contractSizer.getContractSize(whitelist.target.toString()),
-                contractSizer.getContractSize(securityManager.target.toString())
+                contractSizer.getContractSize(securityManager.target.toString()),
+                contractSizer.getContractSize(loadpipeToken.target.toString())
             ]);
 
             const warningLimit = 23000;
