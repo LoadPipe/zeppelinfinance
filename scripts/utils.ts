@@ -45,3 +45,7 @@ export async function getPayoutContract(network: string) {
 export async function getPolicyFactoryContract(network: string) {
     return await ethers.getContractAt("NftPolicyFactory", addresses[network].policyFactory)
 }
+
+export async function getLoadpipeTokenContract(network: string) {
+    return await ethers.getContractAt("LoadpipeToken", addresses[network].loadpipeToken)
+}

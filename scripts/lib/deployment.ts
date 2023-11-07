@@ -1,4 +1,4 @@
-import { ethers } from "hardhat";
+import { ethers, upgrades } from "hardhat";
 import {
     SecurityManager,
     Whitelist,
@@ -209,6 +209,19 @@ export async function deployNftPolicyFactory(
     ));
 
     return await factory.deploy(securityMgrAddr, supportsTableland, tablePrefix, tableId) as NftPolicyFactory;
+}
+
+export async function deployLoadpipeToken(
+    securityMgrAddr: string | Addressable,
+    initialSupply: any = 0
+) {
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        "LoadpipeToken",
+        accounts[0]
+    ));
+    
+    return await upgrades.deployProxy(factory, [securityMgrAddr, initialSupply], { initializer: 'initialize' });
 }
 
 

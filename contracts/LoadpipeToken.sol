@@ -16,11 +16,11 @@ import "./ManagedSecurity.sol";
 /**
  * @title LoadpipeToken
  * 
- * The Loadpipe Governance ERC20 token.
+ * The Loadpipe system ERC20 token.
  * 
  * @author John R. Kosinski
- * Anduril Analytics 
- * Licensed to Loadpipe.io 2023
+ * Zeppelin Finance 2023
+ * All rights reserved. Unauthorized use prohibited.
  */
 contract LoadpipeToken is 
         Initializable,
@@ -28,8 +28,7 @@ contract LoadpipeToken is
         ERC20PausableUpgradeable, 
         ManagedSecurity, 
         UUPSUpgradeable
-{            
-    address public vaultAddress; 
+{   
     bool public frozen;
             
     //ERC20
