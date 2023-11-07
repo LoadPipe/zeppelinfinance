@@ -188,7 +188,7 @@ contract ProductNftIssuer is ManagedSecurity {
         string[] calldata fieldNames,
         string[] calldata fieldValues
     ) external 
-        onlyRole(NFT_SELLER_ROLE) 
+        onlyRole(NFT_SELLER_ROLE) //TODO: unnecessary
         onlyNftOwner(nftAddress) 
         returns (uint256) 
     {
