@@ -11,7 +11,6 @@ import {
 } from "typechain";
 import { upgradeProxy } from "../../scripts/lib/deployment";
 import * as constants from "../constants";
-import { token } from "typechain/@openzeppelin/contracts";
 
 async function getVersionString(contract: any) : Promise<string> {
     const version = await contract.version(); 
