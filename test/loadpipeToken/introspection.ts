@@ -10,7 +10,7 @@ import {
 } from "typechain";
 import * as constants from "../constants";
 
-describe.only("LoadpipeToken: Introspection", function () {
+describe("LoadpipeToken: Introspection", function () {
     let securityManager: SecurityManager;
     let loadpipeToken: any;
     let addresses: any = {}

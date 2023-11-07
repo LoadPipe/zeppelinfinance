@@ -224,4 +224,14 @@ export async function deployLoadpipeToken(
     return await upgrades.deployProxy(factory, [securityMgrAddr, initialSupply], { initializer: 'initialize' });
 }
 
-
+export async function upgradeProxy(
+    address: string | Addressable, 
+    newContractName: string) 
+{
+    const accounts = await ethers.getSigners();
+    const factory: any = (await ethers.getContractFactory(
+        newContractName,
+        accounts[0]
+    ));
+    return await upgrades.upgradeProxy(address, factory);
+}

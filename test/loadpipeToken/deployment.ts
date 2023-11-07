@@ -8,9 +8,8 @@ import {
     LoadpipeToken,
     SecurityManager
 } from "typechain";
-import { getProxyAdminFactory } from "@openzeppelin/hardhat-upgrades/dist/utils";
 
-describe.only("LoadpipeToken: Deployment", function () {
+describe("LoadpipeToken: Deployment", function () {
     let securityManager: SecurityManager;
     let loadpipeToken: any;
     let addresses: any = {}
