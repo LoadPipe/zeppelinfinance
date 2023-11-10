@@ -1,0 +1,2 @@
+
+echidna-test contracts/testContracts/echidna/security_manager_roles_safe/main.sol --config contracts/testContracts/echidna/security_manager_roles_safe/config.yaml --contract security_manager_roles_safe
