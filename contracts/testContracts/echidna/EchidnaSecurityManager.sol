@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-import "./lib/access/AccessControl.sol";
+//import "../../../../node_modules/@openzeppelin/contracts/AccessControl.sol";
+import "./lib/contracts/access/AccessControl.sol";
 import "../../interfaces/ISecurityManager.sol"; 
 
 contract EchidnaSecurityRoles {
