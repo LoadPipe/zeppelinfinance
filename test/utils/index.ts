@@ -152,5 +152,6 @@ export {
     deployAffiliateRewardPolicy,
     deployNftPolicyFactory,
     deployContractSizer, 
-    deployLoadpipeToken
+    deployLoadpipeToken,
+    deployLoadpipeTokenV2
 } from "../../scripts/lib/deployment"; 

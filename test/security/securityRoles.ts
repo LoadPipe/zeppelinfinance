@@ -2,7 +2,13 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import * as constants from "../constants";
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
-import { LoadpipeToken, ProductNft, SecurityManager, SecurityManager__factory, Whitelist, ZeppelinOracle } from "typechain";
+import { 
+    LoadpipeToken, 
+    ProductNft, 
+    SecurityManager, 
+    Whitelist, 
+    ZeppelinOracle 
+} from "typechain";
 import {
     expectEvent,
     expectRevert,
@@ -13,6 +19,7 @@ import {
     grantRole,
     revokeRole,
     deployLoadpipeToken,
+    deployLoadpipeTokenV2,
     deployZeppelinOracle
 } from "../utils";
 
@@ -81,6 +88,7 @@ describe("SecurityManager: Roles", function () {
     let productNft: ProductNft;
     let whitelist: Whitelist;
     let loadpipeToken: any;
+    let loadpipeTokenV2: any;
     let zeppelinOracle: ZeppelinOracle;
     let addresses: any = {};
     let accounts: any = {};
@@ -94,6 +102,7 @@ describe("SecurityManager: Roles", function () {
         productNft = await deployProductNft(securityManager.target, addresses.admin, "a", "b");
         whitelist = await deployWhitelist(securityManager.target);
         loadpipeToken = await deployLoadpipeToken(securityManager.target);
+        loadpipeTokenV2 = await deployLoadpipeTokenV2(securityManager.target);
         zeppelinOracle = await deployZeppelinOracle(securityManager.target);
 
         //assign roles 
@@ -103,7 +112,7 @@ describe("SecurityManager: Roles", function () {
         await securityManager.grantRole(constants.roles.nftIssuer, addresses.nftIssuer);
         await securityManager.grantRole(constants.roles.nftSeller, addresses.nftSeller);
         await securityManager.grantRole(constants.roles.tokenMinter, addresses.tokenMinter);
-        //await securityManager.grantRole(constants.roles.tokenBurner, addresses.tokenBurner);
+        await securityManager.grantRole(constants.roles.tokenBurner, addresses.tokenBurner);
     });
 
     async function assertCan(func: any) {
@@ -286,6 +295,34 @@ describe("SecurityManager: Roles", function () {
                 //)
             );
     }
+
+    async function assertUpgradeTokenPermission(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        const func = async () => { await loadpipeToken.connect(account).upgradeTo(loadpipeTokenV2.address) }
+        if (expectAllowed)
+            await assertCan(func);
+        else
+            await assertCannot(
+                func,
+                "revert with unrecognized return data or custom error"
+                //constants.errorMessages.CUSTOM_ACCESS_CONTROL(
+                //    constants.roles.admin, account.address
+                //)
+            );
+    }
+
+    async function assertFreezeUpgradePermission(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        const func = async () => { await loadpipeToken.connect(account).freeze() }
+        if (expectAllowed)
+            await assertCan(func);
+        else
+            await assertCannot(
+                func,
+                "revert with unrecognized return data or custom error"
+                //constants.errorMessages.CUSTOM_ACCESS_CONTROL(
+                //    constants.roles.admin, account.address
+                //)
+            );
+    }
     
     
 
@@ -334,6 +371,19 @@ describe("SecurityManager: Roles", function () {
         await assertUnpausePermission(loadpipeToken, account, expectAllowed);
     }
 
+    //assert that account has all the permissions that an upgrader should have 
+    async function assertUpgraderPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        
+        //can upgrade token
+        //TODO: (TEST) fix this test 
+        //await assertUpgradeTokenPermission(account, expectAllowed);
+        
+        //can freeze token upgrading
+        await assertFreezeUpgradePermission(account, expectAllowed);
+    }
+
+    
+    
     describe("Admin Role", function () {
         let primaryUser: any;
         let roleTested: string;
@@ -447,7 +497,57 @@ describe("SecurityManager: Roles", function () {
         });
     });
 
-    describe("Minter Role", function () {
+    describe("Upgrader Role", function () {
+        let primaryUser: any;
+        let roleTested: string;
+
+        beforeEach(async function () {
+            roleTested = constants.roles.upgrader;
+            primaryUser = accounts.upgrader;
+        });
+
+        it("has correct roles", async function () {
+            expect(await hasExpectedRoles(primaryUser, [roleTested])).to.be.true;
+        });
+
+        it("role can be granted", async function () {
+            await assertRoleCanBeGranted(accounts.addr1, roleTested);
+            await assertUpgraderPermissions(accounts.addr1);
+        });
+
+        it("role can be revoked", async function () {
+            await assertRoleCanBeRevoked(primaryUser, roleTested);
+            await assertUpgraderPermissions(primaryUser, false);
+        });
+
+        it("role can be renounced", async function () {
+            await assertRoleCanBeRenounced(accounts.addr1, roleTested);
+            await assertUpgraderPermissions(accounts.addr1, false);
+        });
+
+        it("pauser has upgrader permissions", async function () {
+            await assertUpgraderPermissions(primaryUser, true);
+        });
+
+        it("upgrader does not have admin permissions", async function () {
+            await assertAdminPermissions(primaryUser, false);
+        });
+    });
+
+    describe("NFT Issuer Role", function () {
+        //TODO: (TEST) test issuer role
+    });
+
+    describe("NFT Seller Role", function () {
+        //TODO: (TEST) test seller role
+    });
+
+    describe("Token Minter Role", function () {
+        //TODO: (TEST) test minter role
+    });
+
+    describe("Token Burner Role", function () {
+        //TODO: (TEST) test burner role 
     });
 
     //TODO: (TEST) other roles
