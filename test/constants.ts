@@ -9,6 +9,7 @@ export const roles = {
     nftSeller: ethers.keccak256(ethers.toUtf8Bytes("NFT_SELLER_ROLE")), 
     system: ethers.keccak256(ethers.toUtf8Bytes("SYSTEM_ROLE")),
     tokenMinter: ethers.keccak256(ethers.toUtf8Bytes("TOKEN_MINTER_ROLE")),
+    tokenBurner: ethers.keccak256(ethers.toUtf8Bytes("TOKEN_BURNER_ROLE")),
 };
 
 export const addresses = {

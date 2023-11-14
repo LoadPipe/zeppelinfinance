@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import * as constants from "../constants";
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
-import { ProductNft, SecurityManager, SecurityManager__factory, Whitelist } from "typechain";
+import { LoadpipeToken, ProductNft, SecurityManager, SecurityManager__factory, Whitelist, ZeppelinOracle } from "typechain";
 import {
     expectEvent,
     expectRevert,
@@ -11,7 +11,9 @@ import {
     deployWhitelist,
     deployProductNft,
     grantRole,
-    revokeRole
+    revokeRole,
+    deployLoadpipeToken,
+    deployZeppelinOracle
 } from "../utils";
 
 /*
@@ -31,8 +33,13 @@ SYSTEM_ROLE
 ADMIN_ROLE 
 - grant permissions 
 - revoke permissions 
+- set/change security manager
 
 WHITELIST_MANAGER_ROLE
+- set whitelist 
+- add/remove whitelist 
+- add/remove whitelist in bulk 
+- turn whitelist on/off
 
 PAUSER_ROLE 
 - pause/unpause LoadpipeToken
@@ -73,20 +80,30 @@ describe("SecurityManager: Roles", function () {
     let securityManager: SecurityManager;
     let productNft: ProductNft;
     let whitelist: Whitelist;
+    let loadpipeToken: any;
+    let zeppelinOracle: ZeppelinOracle;
     let addresses: any = {};
     let accounts: any = {};
 
     this.beforeEach(async function () {
-        let acc = await getTestAccounts(['admin', 'addr1', 'addr2', 'addr3', 'whitelistManager']);
+        let acc = await getTestAccounts(['admin', 'addr1', 'addr2', 'addr3', 'whitelistManager', 'pauser', 'upgrader', 'nftIssuer', 'nftSeller', 'tokenMinter', 'tokenBurner']);
         addresses = acc.addresses;
         accounts = acc.accounts;
 
         securityManager = await deploySecurityManager(addresses.admin);
         productNft = await deployProductNft(securityManager.target, addresses.admin, "a", "b");
         whitelist = await deployWhitelist(securityManager.target);
+        loadpipeToken = await deployLoadpipeToken(securityManager.target);
+        zeppelinOracle = await deployZeppelinOracle(securityManager.target);
 
         //assign roles 
         await securityManager.grantRole(constants.roles.whitelistManager, addresses.whitelistManager);
+        await securityManager.grantRole(constants.roles.pauser, addresses.pauser);
+        await securityManager.grantRole(constants.roles.upgrader, addresses.upgrader);
+        await securityManager.grantRole(constants.roles.nftIssuer, addresses.nftIssuer);
+        await securityManager.grantRole(constants.roles.nftSeller, addresses.nftSeller);
+        await securityManager.grantRole(constants.roles.tokenMinter, addresses.tokenMinter);
+        //await securityManager.grantRole(constants.roles.tokenBurner, addresses.tokenBurner);
     });
 
     async function assertCan(func: any) {
@@ -146,7 +163,7 @@ describe("SecurityManager: Roles", function () {
     }
 
     async function assertSetWhitelistPermission(account: HardhatEthersSigner, expectAllowed: boolean = true) {
-        //TODO: (TEST) this is wrong
+        //TODO: (TEST) fill this in
     }
 
     async function assertAddRemoveWhitelistPermission(account: HardhatEthersSigner, expectAllowed: boolean = true) {
@@ -200,26 +217,6 @@ describe("SecurityManager: Roles", function () {
             );
     }
 
-    //assert that account has all the permissions that an admin should have 
-    async function assertAdminPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
-        await assertGrantRolePermission(account, expectAllowed);
-        await assertRevokeRolePermission(account, expectAllowed);
-        await assertSetSecurityManagerPermission(productNft, account, expectAllowed);
-        await assertSetSecurityManagerPermission(whitelist, account, expectAllowed);
-        //await assertVaultAdminWithdrawPermission(account, expectAllowed);
-        //await assertDepositVaultAdminWithdrawPermission(account, expectAllowed);
-        //\\await assertSetVaultAddressPermission(account, expectAllowed);
-    }
-
-    //assert that account has all the permissions that a whitelist manager should have 
-    async function assertWhitelistManagerPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
-        //TODO: need to do this on something that has a setWhitelist function
-        //await assertSetWhitelistPermission(account, expectAllowed);
-        await assertAddRemoveWhitelistPermission(account, expectAllowed);
-        await assertAddRemoveWhitelistBulkPermission(account, expectAllowed);
-        await assertTurnWhitelistOnOffPermission(account, expectAllowed);
-    }
-
     //assert that account has permission to grant roles
     async function assertGrantRolePermission(account: HardhatEthersSigner, expectAllowed: boolean = true) {
         const func = async () => { await grantRole(securityManager, constants.roles.admin, addresses.addr1, account); }
@@ -260,6 +257,81 @@ describe("SecurityManager: Roles", function () {
                 //    constants.roles.admin, account.address
                 //)
             );
+    }
+    
+    async function assertPausePermission(contract: any, account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        const func = async () => { await contract.connect(account).pause(); }
+        if (expectAllowed)
+            await assertCan(func);
+        else
+            await assertCannot(
+                func,
+                "revert with unrecognized return data or custom error"
+                //constants.errorMessages.CUSTOM_ACCESS_CONTROL(
+                //    constants.roles.admin, account.address
+                //)
+            );
+    }
+    
+    async function assertUnpausePermission(contract: any, account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        const func = async () => { await contract.connect(account).unpause(); }
+        if (expectAllowed)
+            await assertCan(func);
+        else
+            await assertCannot(
+                func,
+                "revert with unrecognized return data or custom error"
+                //constants.errorMessages.CUSTOM_ACCESS_CONTROL(
+                //    constants.roles.admin, account.address
+                //)
+            );
+    }
+    
+    
+
+
+    //assert that account has all the permissions that an admin should have 
+    async function assertAdminPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        
+        //can grant roles 
+        await assertGrantRolePermission(account, expectAllowed);
+
+        //can revoke roles 
+        await assertRevokeRolePermission(account, expectAllowed);
+        
+        //can set/change security manager 
+        await assertSetSecurityManagerPermission(productNft, account, expectAllowed);
+        await assertSetSecurityManagerPermission(whitelist, account, expectAllowed);
+    }
+
+    //assert that account has all the permissions that a whitelist manager should have 
+    async function assertWhitelistManagerPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        
+        //can set whitelist 
+        await assertSetWhitelistPermission(account, expectAllowed);
+        
+        //can add/remove addresses to/from whitelist
+        await assertAddRemoveWhitelistPermission(account, expectAllowed);
+        
+        //can add/remove addresses to/from whitelist in bulk 
+        await assertAddRemoveWhitelistBulkPermission(account, expectAllowed);
+        
+        //can turn whitelist on/off
+        await assertTurnWhitelistOnOffPermission(account, expectAllowed);
+    }
+
+    //assert that account has all the permissions that a pauser should have 
+    async function assertPauserPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+
+        //can pause/unpause ZeppelinOracle
+        await assertPausePermission(zeppelinOracle, account, expectAllowed);
+        expect(await zeppelinOracle.paused()).to.equal(expectAllowed);
+        await assertUnpausePermission(zeppelinOracle, account, expectAllowed);
+
+        //can pause/unpause ZeppelinOracle
+        await assertPausePermission(loadpipeToken, account, expectAllowed);
+        expect(await loadpipeToken.paused()).to.equal(expectAllowed);
+        await assertUnpausePermission(loadpipeToken, account, expectAllowed);
     }
 
     describe("Admin Role", function () {
@@ -334,6 +406,43 @@ describe("SecurityManager: Roles", function () {
         });
 
         it("whitelist manager does not have admin permissions", async function () {
+            await assertAdminPermissions(primaryUser, false);
+        });
+    });
+
+    describe("Pauser Role", function () {
+        let primaryUser: any;
+        let roleTested: string;
+
+        beforeEach(async function () {
+            roleTested = constants.roles.pauser;
+            primaryUser = accounts.pauser;
+        });
+
+        it("has correct roles", async function () {
+            expect(await hasExpectedRoles(primaryUser, [roleTested])).to.be.true;
+        });
+
+        it("role can be granted", async function () {
+            await assertRoleCanBeGranted(accounts.addr1, roleTested);
+            await assertPauserPermissions(accounts.addr1);
+        });
+
+        it("role can be revoked", async function () {
+            await assertRoleCanBeRevoked(primaryUser, roleTested);
+            await assertPauserPermissions(primaryUser, false);
+        });
+
+        it("role can be renounced", async function () {
+            await assertRoleCanBeRenounced(accounts.addr1, roleTested);
+            await assertPauserPermissions(accounts.addr1, false);
+        });
+
+        it("pauser has pauser permissions", async function () {
+            await assertPauserPermissions(primaryUser, true);
+        });
+
+        it("pauser does not have admin permissions", async function () {
             await assertAdminPermissions(primaryUser, false);
         });
     });
