@@ -382,6 +382,26 @@ describe("SecurityManager: Roles", function () {
         await assertFreezeUpgradePermission(account, expectAllowed);
     }
 
+    //assert that account has all the permissions that an nft issuer should have 
+    async function assertNftIssuerPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        //TODO: (TEST) fill in 
+    }
+
+    //assert that account has all the permissions that an nft seller should have 
+    async function assertNftSellerPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        //TODO: (TEST) fill in 
+    }
+
+    //assert that account has all the permissions that a token minter should have 
+    async function assertTokenMinterPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        //TODO: (TEST) fill in 
+    }
+
+    //assert that account has all the permissions that a token burner should have 
+    async function assertTokenBurnerPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        //TODO: (TEST) fill in 
+    }
+
     
     
     describe("Admin Role", function () {
@@ -535,19 +555,151 @@ describe("SecurityManager: Roles", function () {
     });
 
     describe("NFT Issuer Role", function () {
-        //TODO: (TEST) test issuer role
+        let primaryUser: any;
+        let roleTested: string;
+
+        beforeEach(async function () {
+            roleTested = constants.roles.nftIssuer;
+            primaryUser = accounts.nftIssuer;
+        });
+
+        it("has correct roles", async function () {
+            expect(await hasExpectedRoles(primaryUser, [roleTested])).to.be.true;
+        });
+
+        it("role can be granted", async function () {
+            await assertRoleCanBeGranted(accounts.addr1, roleTested);
+            await assertNftIssuerPermissions(accounts.addr1);
+        });
+
+        it("role can be revoked", async function () {
+            await assertRoleCanBeRevoked(primaryUser, roleTested);
+            await assertNftIssuerPermissions(primaryUser, false);
+        });
+
+        it("role can be renounced", async function () {
+            await assertRoleCanBeRenounced(accounts.addr1, roleTested);
+            await assertNftIssuerPermissions(accounts.addr1, false);
+        });
+
+        it("pauser has nft issuer permissions", async function () {
+            await assertNftIssuerPermissions(primaryUser, true);
+        });
+
+        it("nft issuer does not have admin permissions", async function () {
+            await assertAdminPermissions(primaryUser, false);
+        });
     });
 
     describe("NFT Seller Role", function () {
-        //TODO: (TEST) test seller role
+        let primaryUser: any;
+        let roleTested: string;
+
+        beforeEach(async function () {
+            roleTested = constants.roles.nftSeller;
+            primaryUser = accounts.nftSeller;
+        });
+
+        it("has correct roles", async function () {
+            expect(await hasExpectedRoles(primaryUser, [roleTested])).to.be.true;
+        });
+
+        it("role can be granted", async function () {
+            await assertRoleCanBeGranted(accounts.addr1, roleTested);
+            await assertNftSellerPermissions(accounts.addr1);
+        });
+
+        it("role can be revoked", async function () {
+            await assertRoleCanBeRevoked(primaryUser, roleTested);
+            await assertNftSellerPermissions(primaryUser, false);
+        });
+
+        it("role can be renounced", async function () {
+            await assertRoleCanBeRenounced(accounts.addr1, roleTested);
+            await assertNftSellerPermissions(accounts.addr1, false);
+        });
+
+        it("pauser has nft seller permissions", async function () {
+            await assertNftSellerPermissions(primaryUser, true);
+        });
+
+        it("nft seller does not have admin permissions", async function () {
+            await assertAdminPermissions(primaryUser, false);
+        });
     });
 
     describe("Token Minter Role", function () {
-        //TODO: (TEST) test minter role
+        let primaryUser: any;
+        let roleTested: string;
+
+        beforeEach(async function () {
+            roleTested = constants.roles.tokenMinter;
+            primaryUser = accounts.tokenMinter;
+        });
+
+        it("has correct roles", async function () {
+            expect(await hasExpectedRoles(primaryUser, [roleTested])).to.be.true;
+        });
+
+        it("role can be granted", async function () {
+            await assertRoleCanBeGranted(accounts.addr1, roleTested);
+            await assertTokenMinterPermissions(accounts.addr1);
+        });
+
+        it("role can be revoked", async function () {
+            await assertRoleCanBeRevoked(primaryUser, roleTested);
+            await assertTokenMinterPermissions(primaryUser, false);
+        });
+
+        it("role can be renounced", async function () {
+            await assertRoleCanBeRenounced(accounts.addr1, roleTested);
+            await assertTokenMinterPermissions(accounts.addr1, false);
+        });
+
+        it("pauser has token minter permissions", async function () {
+            await assertTokenMinterPermissions(primaryUser, true);
+        });
+
+        it("token minter does not have admin permissions", async function () {
+            await assertTokenMinterPermissions(primaryUser, false);
+        });
     });
 
     describe("Token Burner Role", function () {
-        //TODO: (TEST) test burner role 
+        let primaryUser: any;
+        let roleTested: string;
+
+        beforeEach(async function () {
+            roleTested = constants.roles.tokenBurner;
+            primaryUser = accounts.tokenBurner;
+        });
+
+        it("has correct roles", async function () {
+            expect(await hasExpectedRoles(primaryUser, [roleTested])).to.be.true;
+        });
+
+        it("role can be granted", async function () {
+            await assertRoleCanBeGranted(accounts.addr1, roleTested);
+            await assertTokenBurnerPermissions(accounts.addr1);
+        });
+
+        it("role can be revoked", async function () {
+            await assertRoleCanBeRevoked(primaryUser, roleTested);
+            await assertTokenBurnerPermissions(primaryUser, false);
+        });
+
+        it("role can be renounced", async function () {
+            await assertRoleCanBeRenounced(accounts.addr1, roleTested);
+            await assertTokenBurnerPermissions(accounts.addr1, false);
+        });
+
+        it("pauser has token burner permissions", async function () {
+            await assertTokenBurnerPermissions(primaryUser, true);
+        });
+
+        it("token burner does not have admin permissions", async function () {
+            await assertTokenBurnerPermissions(primaryUser, false);
+        });
     });
 
     //TODO: (TEST) other roles
