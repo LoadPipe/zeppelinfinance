@@ -323,6 +323,34 @@ describe("SecurityManager: Roles", function () {
                 //)
             );
     }
+
+    async function assertTokenMintPermission(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        const func = async () => { await loadpipeToken.connect(account).mint(account.address, 1) }
+        if (expectAllowed)
+            await assertCan(func);
+        else
+            await assertCannot(
+                func,
+                "revert with unrecognized return data or custom error"
+                //constants.errorMessages.CUSTOM_ACCESS_CONTROL(
+                //    constants.roles.admin, account.address
+                //)
+            );
+    }
+
+    async function assertTokenBurnPermission(account: HardhatEthersSigner, expectAllowed: boolean = true) {
+        const func = async () => { await loadpipeToken.connect(account).burn(1) }
+        if (expectAllowed)
+            await assertCan(func);
+        else
+            await assertCannot(
+                func,
+                "revert with unrecognized return data or custom error"
+                //constants.errorMessages.CUSTOM_ACCESS_CONTROL(
+                //    constants.roles.admin, account.address
+                //)
+            );
+    }
     
     
 
@@ -394,12 +422,16 @@ describe("SecurityManager: Roles", function () {
 
     //assert that account has all the permissions that a token minter should have 
     async function assertTokenMinterPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
-        //TODO: (TEST) fill in 
+        
+        //can mint the token 
+        await assertTokenMintPermission(account, expectAllowed); 
     }
 
     //assert that account has all the permissions that a token burner should have 
     async function assertTokenBurnerPermissions(account: HardhatEthersSigner, expectAllowed: boolean = true) {
-        //TODO: (TEST) fill in 
+
+        //can burn the token 
+        await assertTokenBurnPermission(account, expectAllowed); 
     }
 
     
@@ -545,7 +577,7 @@ describe("SecurityManager: Roles", function () {
             await assertUpgraderPermissions(accounts.addr1, false);
         });
 
-        it("pauser has upgrader permissions", async function () {
+        it("upgrader has upgrader permissions", async function () {
             await assertUpgraderPermissions(primaryUser, true);
         });
 
@@ -582,7 +614,7 @@ describe("SecurityManager: Roles", function () {
             await assertNftIssuerPermissions(accounts.addr1, false);
         });
 
-        it("pauser has nft issuer permissions", async function () {
+        it("issuer has nft issuer permissions", async function () {
             await assertNftIssuerPermissions(primaryUser, true);
         });
 
@@ -619,7 +651,7 @@ describe("SecurityManager: Roles", function () {
             await assertNftSellerPermissions(accounts.addr1, false);
         });
 
-        it("pauser has nft seller permissions", async function () {
+        it("seller has nft seller permissions", async function () {
             await assertNftSellerPermissions(primaryUser, true);
         });
 
@@ -656,12 +688,12 @@ describe("SecurityManager: Roles", function () {
             await assertTokenMinterPermissions(accounts.addr1, false);
         });
 
-        it("pauser has token minter permissions", async function () {
+        it("minter has token minter permissions", async function () {
             await assertTokenMinterPermissions(primaryUser, true);
         });
 
         it("token minter does not have admin permissions", async function () {
-            await assertTokenMinterPermissions(primaryUser, false);
+            await assertAdminPermissions(primaryUser, false);
         });
     });
 
@@ -672,6 +704,8 @@ describe("SecurityManager: Roles", function () {
         beforeEach(async function () {
             roleTested = constants.roles.tokenBurner;
             primaryUser = accounts.tokenBurner;
+            await loadpipeToken.connect(accounts.tokenMinter).mint(addresses.tokenBurner, 1000);
+            await loadpipeToken.connect(accounts.tokenMinter).mint(addresses.addr1, 1000);
         });
 
         it("has correct roles", async function () {
@@ -693,12 +727,12 @@ describe("SecurityManager: Roles", function () {
             await assertTokenBurnerPermissions(accounts.addr1, false);
         });
 
-        it("pauser has token burner permissions", async function () {
+        it("burner has token burner permissions", async function () {
             await assertTokenBurnerPermissions(primaryUser, true);
         });
 
         it("token burner does not have admin permissions", async function () {
-            await assertTokenBurnerPermissions(primaryUser, false);
+            await assertAdminPermissions(primaryUser, false);
         });
     });
 
