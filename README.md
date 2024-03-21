@@ -1,3 +1,5 @@
+# <img src="zeppelinlogo.png" alt="OpenZeppelin" height="40px">
+
 # Zeppelin Finance
 
 ## Setup & Operation
