@@ -1,4 +1,4 @@
-# <img src="zeppelinlogo.png" alt="OpenZeppelin" height="40px">
+# <img src="zepellin.png" alt="OpenZeppelin" height="60px">   <img src="zeppelinlogo.png" alt="OpenZeppelin" height="60px"> 
 
 # Zeppelin Finance
 
